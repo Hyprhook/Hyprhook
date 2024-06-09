@@ -1,0 +1,15 @@
+[repository]
+authors = ["Moritz Gleissner", "Yusuf Duran"]
+name = "hyprhook"
+commit_pins = [
+  [
+    "cba1ade848feac44b2eda677503900639581c3f4",
+    "7c3fa5bd72834e3db5ca3218894189c1b9f0b28b",
+  ],
+]
+
+[hypr-which-key]
+authors = ["Moritz Gleissner", "Yusuf Duran"]
+description = "Execute binarys on hyprland events"
+output = "hyprhook/hyprhook.so"
+build = ["make -C hyprhook all"]
