@@ -13,8 +13,8 @@ Then use `hyprctl plugin load` followed by the absolute path to the `.so` file t
 ### Hyprpm
 
 ```
-hyprpm add https://github.com/Moerliy/Hypr-Which-Key
-hyprpm enable Hyprspace
+hyprpm add https://github.com/Yusuf-Duran/Hyprhook
+hyprpm enable Hyprhook
 ```
 
 ### Nix
