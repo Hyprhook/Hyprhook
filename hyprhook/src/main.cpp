@@ -13,18 +13,23 @@ APICALL EXPORT std::string PLUGIN_API_VERSION() {
     return HYPRLAND_API_VERSION;
 }
 
-static void onSubmap(void* self, std::any data) {
-    // data is guaranteed
-    const auto         submap = std::any_cast<std::string>(data);
+static void hookCaller(Hyprlang::STRING const& hook, std::vector<std::string> const& args = {}) {
+    throw std::runtime_error("Not implemented yet!");
+    HyprlandAPI::addNotification(PHANDLE, std::format("[hypr-which-key] Gonna execute {} with args: {}!", hook, ""), CColor{0.2, 1.0, 0.2, 1.0}, 5000);
 
-    static auto* const PSUBMAP = (Hyprlang::STRING const*)HyprlandAPI::getConfigValue(PHANDLE, "plugin:hyprhook:submap")->getDataStaticPtr();
-
-    HyprlandAPI::addNotification(PHANDLE, "[hypr-which-key] changed submap to " + submap + " and execute " + *PSUBMAP + " !", CColor{0.2, 1.0, 0.2, 1.0}, 5000);
-
-    g_pKeybindManager->spawn(*PSUBMAP);
+    g_pKeybindManager->spawn(hook);
 }
 
-APICALL EXPORT PLUGIN_DESCRIPTION_INFO PLUGIN_INIT(HANDLE handle) {
+std::vector<std::string> events = {
+    "submap",
+    "activeWindow",
+    "workspace",
+};
+
+static std::unordered_map<std::string, Hyprlang::STRING const*>          eventMap = {};
+static std::unordered_map<std::string, CSharedPointer<HOOK_CALLBACK_FN>> hookMap  = {};
+
+APICALL EXPORT PLUGIN_DESCRIPTION_INFO                                   PLUGIN_INIT(HANDLE handle) {
     PHANDLE = handle;
 
     const std::string HASH = __hyprland_api_get_hash();
@@ -36,10 +41,12 @@ APICALL EXPORT PLUGIN_DESCRIPTION_INFO PLUGIN_INIT(HANDLE handle) {
         throw std::runtime_error("[hypr-which-key] Version mismatch");
     }
 
-    static auto P = HyprlandAPI::registerCallbackDynamic(PHANDLE, "submap", [&](void* self, SCallbackInfo& info, std::any data) { onSubmap(self, data); });
-    // throw std::runtime_error(printStr.str());
-
-    HyprlandAPI::addConfigValue(PHANDLE, "plugin:hyprhook:submap", Hyprlang::STRING{"nothing"});
+    for (auto& event : events) {
+        HyprlandAPI::addConfigValue(PHANDLE, "plugin:hyprhook:" + event, Hyprlang::STRING{""});
+        eventMap[event] = (Hyprlang::STRING const*)HyprlandAPI::getConfigValue(PHANDLE, "plugin:hyprhook:" + event)->getDataStaticPtr();
+        hookMap[event] =
+            HyprlandAPI::registerCallbackDynamic(PHANDLE, "plugin:hyprhook:" + event, [&](void* self, SCallbackInfo& info, std::any data) { hookCaller(*eventMap[event]); });
+    }
 
     HyprlandAPI::reloadConfig();
 
