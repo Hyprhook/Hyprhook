@@ -14,9 +14,7 @@ APICALL EXPORT std::string PLUGIN_API_VERSION() {
 }
 
 static void hookCaller(Hyprlang::STRING const& hook, std::vector<std::string> const& args = {}) {
-    throw std::runtime_error("Not implemented yet!");
     HyprlandAPI::addNotification(PHANDLE, std::format("[hypr-which-key] Gonna execute {} with args: {}!", hook, ""), CColor{0.2, 1.0, 0.2, 1.0}, 5000);
-
     g_pKeybindManager->spawn(hook);
 }
 
@@ -44,8 +42,7 @@ APICALL EXPORT PLUGIN_DESCRIPTION_INFO                                   PLUGIN_
     for (auto& event : events) {
         HyprlandAPI::addConfigValue(PHANDLE, "plugin:hyprhook:" + event, Hyprlang::STRING{""});
         eventMap[event] = (Hyprlang::STRING const*)HyprlandAPI::getConfigValue(PHANDLE, "plugin:hyprhook:" + event)->getDataStaticPtr();
-        hookMap[event] =
-            HyprlandAPI::registerCallbackDynamic(PHANDLE, "plugin:hyprhook:" + event, [&](void* self, SCallbackInfo& info, std::any data) { hookCaller(*eventMap[event]); });
+        hookMap[event] = HyprlandAPI::registerCallbackDynamic(PHANDLE, event, [&](void* self, SCallbackInfo& info, std::any data) { hookCaller(*eventMap[event]); });
     }
 
     HyprlandAPI::reloadConfig();
