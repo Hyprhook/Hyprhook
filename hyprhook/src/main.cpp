@@ -18,11 +18,11 @@ static void hookCaller(Hyprlang::STRING const& hook, std::vector<std::string> co
     g_pKeybindManager->spawn(hook);
 }
 
-std::vector<std::string> events = {
-    "submap",
-    "activeWindow",
-    "workspace",
-};
+std::vector<std::string> events = {"activeWindow",    "keyboardFocus",      "moveWorkspace", "focusedMon", "moveWindow",   "openLayer",      "closeLayer",      "openWindow",
+                                   "closeWindow",     "windowUpdateRules",  "urgent",        "minimize",   "monitorAdded", "monitorRemoved", "createWorkspace", "destroyWorkspace",
+                                   "fullscreen",      "changeFloatingMode", "workspace",     "submap",     "mouseMove",    "mouseButton",    "mouseAxis",       "touchDown",
+                                   "touchUp",         "touchMove",          "activeLayout",  "preRender",  "screencast",   "render",         "windowtitle",     "configReloaded",
+                                   "preConfigReload", "keyPress",           "pin",           "swipeBegin", "swipeUpdate",  "swipeEnd"};
 
 static std::unordered_map<std::string, Hyprlang::STRING const*>          eventMap = {};
 static std::unordered_map<std::string, CSharedPointer<HOOK_CALLBACK_FN>> hookMap  = {};
