@@ -1,6 +1,10 @@
+#include <hyprlang.hpp>
 #define WLR_USE_UNSTABLE
 
 #include <hyprland/src/plugins/PluginAPI.hpp>
+#define private public
+#include <hyprland/src/managers/KeybindManager.hpp>
+#undef private
 
 #include "globals.hpp"
 
@@ -11,9 +15,17 @@ static void onSubmap(void *self, std::any data) {
   // data is guaranteed
   const auto submap = std::any_cast<std::string>(data);
 
-  HyprlandAPI::addNotification(
-      PHANDLE, "[hypr-which-key] changed submap to " + submap + " !",
-      CColor{0.2, 1.0, 0.2, 1.0}, 5000);
+  static auto *const PSUBMAP =
+      (Hyprlang::STRING const *)HyprlandAPI::getConfigValue(
+          PHANDLE, "plugin:hyprhook:submap")
+          ->getDataStaticPtr();
+
+  HyprlandAPI::addNotification(PHANDLE,
+                               "[hypr-which-key] changed submap to " + submap +
+                                   " and execute " + *PSUBMAP + " !",
+                               CColor{0.2, 1.0, 0.2, 1.0}, 5000);
+
+  g_pKeybindManager->spawn(*PSUBMAP);
 }
 
 APICALL EXPORT PLUGIN_DESCRIPTION_INFO PLUGIN_INIT(HANDLE handle) {
@@ -35,6 +47,11 @@ APICALL EXPORT PLUGIN_DESCRIPTION_INFO PLUGIN_INIT(HANDLE handle) {
         onSubmap(self, data);
       });
   // throw std::runtime_error(printStr.str());
+
+  HyprlandAPI::addConfigValue(PHANDLE, "plugin:hyprhook:submap",
+                              Hyprlang::STRING{"nothing"});
+
+  HyprlandAPI::reloadConfig();
 
   HyprlandAPI::addNotification(PHANDLE,
                                "[hypr-which-key] Initialized successfully!",
