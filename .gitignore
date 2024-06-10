@@ -43,3 +43,6 @@ meson-out
 meson-info
 meson-logs
 meson-private
+
+# vscode
+.vscode
