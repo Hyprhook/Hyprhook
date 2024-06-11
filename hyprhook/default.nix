@@ -11,7 +11,7 @@ hyprlandPlugins.mkHyprlandPlugin hyprland {
   inherit (hyprland) nativeBuildInputs;
 
   meta = with lib; {
-    homepage = "https://github.com/Yusuf-Duran/Hyprhook";
+    homepage = "https://github.com/Hyprhook/Hyprhook";
     description = "Execute binarys on hyprland events";
     license = licenses.mit;
     platforms = platforms.linux;
