@@ -32,12 +32,12 @@ static void hookCaller(Hyprlang::STRING const& hook, std::vector<std::string> co
     for (const std::string& arg : args) {
         argsStr += " " + arg;
     }
-    HyprlandAPI::addNotification(PHANDLE, std::format("[hypr-which-key] Gonna execute {} with args: {}!", hook, argsStr), CColor{0.2, 1.0, 0.2, 1.0}, 5000);
+    // HyprlandAPI::addNotification(PHANDLE, std::format("[hypr-which-key] Gonna execute {} with args: {}!", hook, argsStr), CColor{0.2, 1.0, 0.2, 1.0}, 5000);
     g_pKeybindManager->spawn(hook + argsStr);
 }
 
 static void onConfigReloaded(void* self, std::any data) {
-    HyprlandAPI::addNotification(PHANDLE, "[hypr-which-key] config reoaded ", CColor{1.0, 0.2, 0.2, 1.0}, 5000);
+    HyprlandAPI::addNotification(PHANDLE, "[hypr-which-key] config reoaded ", CColor{0.2, 1.0, 0.2, 1.0}, 5000);
     for (auto& event : events) {
         if ((std::string)*eventMap[event] == "") {
             hookMap.erase(event);
@@ -65,7 +65,7 @@ APICALL EXPORT PLUGIN_DESCRIPTION_INFO PLUGIN_INIT(HANDLE handle) {
             if ((std::string)*eventMap[event] == "") {
                 return;
             }
-            HyprlandAPI::addNotification(PHANDLE, "[hypr-which-key] hook run ", CColor{1.0, 0.2, 0.2, 1.0}, 5000);
+            // HyprlandAPI::addNotification(PHANDLE, "[hypr-which-key] hook run ", CColor{1.0, 0.2, 0.2, 1.0}, 5000);
             std::vector<std::string> args = {};
             if (event == "submap") {
                 const auto submap = std::any_cast<std::string>(data);
