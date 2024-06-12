@@ -48,7 +48,7 @@
       with pkgsFor.${system}; {
         default = mkShell.override {stdenv = gcc13Stdenv;} {
           name = "hyprhook";
-          buildInputs = [hyprland.packages.${system}.hyprland];
+          buildInputs = [hyprland.packages.${system}.hyprland nlohmann_json];
           inputsFrom = [
             hyprland.packages.${system}.hyprland
             self.packages.${system}.hyprhook
