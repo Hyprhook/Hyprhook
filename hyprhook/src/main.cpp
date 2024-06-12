@@ -60,17 +60,17 @@ static std::unordered_map<std::string, CSharedPointer<HOOK_CALLBACK_FN>>     hoo
 static std::unordered_map<std::string, bool>                                 enabledMap;
 
 // nuhu
+static void updateEnableMap() {
+    for (auto& event : events) {
+        enabledMap[event] = (std::string)*eventMap[event] == "" ? false : true;
+    }
+}
 
 static void onConfigReloaded(void* self, std::any data) {
     HyprlandAPI::addNotification(PHANDLE, "[Hyprhook] config reoaded ", CColor{0.2, 1.0, 0.2, 1.0}, 5000);
     updateEnableMap();
 }
 
-static void updateEnableMap() {
-    for (auto& event : events) {
-        enabledMap[event] = (std::string)*eventMap[event] == "" ? false : true;
-    }
-}
 
 APICALL EXPORT PLUGIN_DESCRIPTION_INFO PLUGIN_INIT(HANDLE handle) {
     PHANDLE = handle;
