@@ -57,15 +57,18 @@ static std::unordered_map<std::string, std::function<std::string(std::any)>> fun
 static std::vector<std::string>                                              events;
 static std::unordered_map<std::string, Hyprlang::STRING const*>              eventMap;
 static std::unordered_map<std::string, CSharedPointer<HOOK_CALLBACK_FN>>     hookMap;
+static std::unordered_map<std::string, bool>                                 enabledMap;
 
 // nuhu
 
 static void onConfigReloaded(void* self, std::any data) {
     HyprlandAPI::addNotification(PHANDLE, "[hypr-which-key] config reoaded ", CColor{0.2, 1.0, 0.2, 1.0}, 5000);
+    updateEnableMap();
+}
+
+static void updateEnableMap() {
     for (auto& event : events) {
-        if ((std::string)*eventMap[event] == "") {
-            hookMap.erase(event);
-        }
+        enabledMap[event] = (std::string)*eventMap[event] == "" ? false : true;
     }
 }
 
@@ -89,8 +92,10 @@ APICALL EXPORT PLUGIN_DESCRIPTION_INFO PLUGIN_INIT(HANDLE handle) {
         HyprlandAPI::addConfigValue(PHANDLE, "plugin:hyprhook:" + event, Hyprlang::STRING{""});
         eventMap[event] = (Hyprlang::STRING const*)HyprlandAPI::getConfigValue(PHANDLE, "plugin:hyprhook:" + event)->getDataStaticPtr();
 
+        updateEnableMap();
+
         hookMap[event] = HyprlandAPI::registerCallbackDynamic(PHANDLE, event, [&](void* self, SCallbackInfo& info, std::any data) {
-            if ((std::string)*eventMap[event] == "") {
+            if (!enabledMap[event]) {
                 return;
             }
             const auto& it = functionsMap.find(event);
