@@ -1,6 +1,6 @@
 [repository]
 authors = ["Moritz Gleissner", "Yusuf Duran"]
-name = "hyprhook"
+name = "Hyprhook"
 commit_pins = [
   [
     "8412ffcc42012888757cd00a004871e8bc353cf2",
