@@ -9,6 +9,7 @@ hyprlandPlugins.mkHyprlandPlugin hyprland {
   src = ./.;
 
   inherit (hyprland) nativeBuildInputs;
+  buildInputs = [nlohmann_json]
 
   meta = with lib; {
     homepage = "https://github.com/Hyprhook/Hyprhook";
