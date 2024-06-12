@@ -29,6 +29,7 @@
       inherit
         (pkgsFor.${system})
         hyprhook
+        nlohmann_json
         ;
     });
 
