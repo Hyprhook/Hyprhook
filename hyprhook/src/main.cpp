@@ -62,7 +62,7 @@ static std::unordered_map<std::string, bool>                                 ena
 // nuhu
 
 static void onConfigReloaded(void* self, std::any data) {
-    HyprlandAPI::addNotification(PHANDLE, "[hypr-which-key] config reoaded ", CColor{0.2, 1.0, 0.2, 1.0}, 5000);
+    HyprlandAPI::addNotification(PHANDLE, "[Hyprhook] config reoaded ", CColor{0.2, 1.0, 0.2, 1.0}, 5000);
     updateEnableMap();
 }
 
@@ -84,8 +84,8 @@ APICALL EXPORT PLUGIN_DESCRIPTION_INFO PLUGIN_INIT(HANDLE handle) {
     // ALWAYS add this to your plugins. It will prevent random crashes coming from
     // mismatched header versions.
     if (HASH != GIT_COMMIT_HASH) {
-        HyprlandAPI::addNotification(PHANDLE, "[hypr-which-key] Mismatched headers! Can't proceed.", CColor{1.0, 0.2, 0.2, 1.0}, 5000);
-        throw std::runtime_error("[hypr-which-key] Version mismatch");
+        HyprlandAPI::addNotification(PHANDLE, "[Hyprhook] Mismatched headers! Can't proceed.", CColor{1.0, 0.2, 0.2, 1.0}, 5000);
+        throw std::runtime_error("[Hyprhook] Version mismatch");
     }
 
     for (auto& event : events) {
