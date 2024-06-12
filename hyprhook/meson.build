@@ -25,6 +25,7 @@ shared_module(meson.project_name(), src,
     dependency('libudev'),
     dependency('wayland-server'),
     dependency('xkbcommon'),
+    dependency('nlohmann_json')
   ],
   install: true,
 )

@@ -21,6 +21,7 @@ hyprland
     pixman-1
     wayland-server
     xkbcommon
+    nlohmann_json
 )
 target_link_libraries(hyprhook PRIVATE rt PkgConfig::deps)
 
