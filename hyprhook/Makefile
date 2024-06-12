@@ -1,5 +1,5 @@
 CXXFLAGS=-shared -fPIC --no-gnu-unique -Wall -g -std=c++2b -O2
-INCLUDES = `pkg-config --cflags pixman-1 libdrm hyprland pangocairo libinput libudev wayland-server xkbcommon nlohmann_json`
+INCLUDES = `pkg-config --cflags pixman-1 libdrm hyprland pangocairo libinput libudev wayland-server xkbcommon`
 SRC = $(wildcard src/*.cpp)
 TARGET = hyprhook.so
 

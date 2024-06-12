@@ -50,7 +50,6 @@
         default = mkShell.override {stdenv = gcc13Stdenv;} {
           name = "hyprhook";
           buildInputs = [hyprland.packages.${system}.hyprland];
-          nativeBuildInputs = [nlohmann_json];
           inputsFrom = [
             hyprland.packages.${system}.hyprland
             self.packages.${system}.hyprhook
