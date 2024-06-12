@@ -15,26 +15,50 @@ APICALL EXPORT std::string PLUGIN_API_VERSION() {
     return HYPRLAND_API_VERSION;
 }
 
-const std::vector<std::string> events = {
-    "activeWindow",    "keyboardFocus",      "moveWorkspace", "focusedMon", "moveWindow",   "openLayer",      "closeLayer",      "openWindow",
-    "closeWindow",     "windowUpdateRules",  "urgent",        "minimize",   "monitorAdded", "monitorRemoved", "createWorkspace", "destroyWorkspace",
-    "fullscreen",      "changeFloatingMode", "workspace",     "submap",     "mouseMove",    "mouseButton",    "mouseAxis",       "touchDown",
-    "touchUp",         "touchMove",          "activeLayout",  "preRender",  "screencast",   "render",         "windowtitle",     "configReloaded",
-    "preConfigReload", "keyPress",           "pin",           "swipeBegin", "swipeUpdate",  "swipeEnd"};
+static std::unordered_map<std::string, std::function<std::string(std::any)>> functionsMap = {{"activeWindow", [](std::any data) { return ""; }},
+                                                                                             {"keyboardFocus", [](std::any data) { return ""; }},
+                                                                                             {"moveWorkspace", [](std::any data) { return ""; }},
+                                                                                             {"focusedMon", [](std::any data) { return ""; }}, //
+                                                                                             {"moveWindow", [](std::any data) { return ""; }},
+                                                                                             {"openLayer", [](std::any data) { return ""; }},
+                                                                                             {"closeLayer", [](std::any data) { return ""; }},
+                                                                                             {"openWindow", [](std::any data) { return ""; }},
+                                                                                             {"closeWindow", [](std::any data) { return ""; }},
+                                                                                             {"windowUpdateRules", [](std::any data) { return ""; }},
+                                                                                             {"urgent", [](std::any data) { return ""; }},
+                                                                                             {"minimize", [](std::any data) { return ""; }},
+                                                                                             {"monitorAdded", [](std::any data) { return ""; }},
+                                                                                             {"monitorRemoved", [](std::any data) { return ""; }},
+                                                                                             {"createWorkspace", [](std::any data) { return ""; }},
+                                                                                             {"destroyWorkspace", [](std::any data) { return ""; }},
+                                                                                             {"fullscreen", [](std::any data) { return ""; }},
+                                                                                             {"changeFloatingMode", [](std::any data) { return ""; }},
+                                                                                             {"workspace", [](std::any data) { return ""; }},
+                                                                                             {"submap", [](std::any data) { return std::any_cast<std::string>(data); }},
+                                                                                             {"mouseMove", [](std::any data) { return ""; }},
+                                                                                             {"mouseButton", [](std::any data) { return ""; }},
+                                                                                             {"mouseAxis", [](std::any data) { return ""; }},
+                                                                                             {"touchDown", [](std::any data) { return ""; }},
+                                                                                             {"touchUp", [](std::any data) { return ""; }},
+                                                                                             {"touchMove", [](std::any data) { return ""; }},
+                                                                                             {"activeLayout", [](std::any data) { return ""; }},
+                                                                                             {"preRender", [](std::any data) { return ""; }},
+                                                                                             {"screencast", [](std::any data) { return ""; }},
+                                                                                             {"render", [](std::any data) { return ""; }},
+                                                                                             {"windowtitle", [](std::any data) { return ""; }},
+                                                                                             {"configReloaded", [](std::any data) { return ""; }},
+                                                                                             {"preConfigReload", [](std::any data) { return ""; }},
+                                                                                             {"keyPress", [](std::any data) { return ""; }},
+                                                                                             {"pin", [](std::any data) { return ""; }},
+                                                                                             {"swipeBegin", [](std::any data) { return ""; }},
+                                                                                             {"swipeUpdate", [](std::any data) { return ""; }},
+                                                                                             {"swipeEnd", [](std::any data) { return ""; }}};
 
-static std::unordered_map<std::string, Hyprlang::STRING const*>          eventMap = {};
-static std::unordered_map<std::string, CSharedPointer<HOOK_CALLBACK_FN>> hookMap  = {};
+static std::vector<std::string>                                              events;
+static std::unordered_map<std::string, Hyprlang::STRING const*>              eventMap;
+static std::unordered_map<std::string, CSharedPointer<HOOK_CALLBACK_FN>>     hookMap;
 
 // nuhu
-
-static void hookCaller(Hyprlang::STRING const& hook, std::vector<std::string> const& args = {}) {
-    std::string argsStr;
-    for (const std::string& arg : args) {
-        argsStr += " " + arg;
-    }
-    // HyprlandAPI::addNotification(PHANDLE, std::format("[hypr-which-key] Gonna execute {} with args: {}!", hook, argsStr), CColor{0.2, 1.0, 0.2, 1.0}, 5000);
-    g_pKeybindManager->spawn(hook + argsStr);
-}
 
 static void onConfigReloaded(void* self, std::any data) {
     HyprlandAPI::addNotification(PHANDLE, "[hypr-which-key] config reoaded ", CColor{0.2, 1.0, 0.2, 1.0}, 5000);
@@ -49,6 +73,10 @@ APICALL EXPORT PLUGIN_DESCRIPTION_INFO PLUGIN_INIT(HANDLE handle) {
     PHANDLE = handle;
 
     const std::string HASH = __hyprland_api_get_hash();
+
+    for (const auto& it : functionsMap) {
+        events.push_back(it.first);
+    }
 
     // ALWAYS add this to your plugins. It will prevent random crashes coming from
     // mismatched header versions.
@@ -65,13 +93,12 @@ APICALL EXPORT PLUGIN_DESCRIPTION_INFO PLUGIN_INIT(HANDLE handle) {
             if ((std::string)*eventMap[event] == "") {
                 return;
             }
-            // HyprlandAPI::addNotification(PHANDLE, "[hypr-which-key] hook run ", CColor{1.0, 0.2, 0.2, 1.0}, 5000);
-            std::vector<std::string> args = {};
-            if (event == "submap") {
-                const auto submap = std::any_cast<std::string>(data);
-                args.push_back(submap);
+            const auto& it = functionsMap.find(event);
+            if (it == functionsMap.end()) {
+                return;
             }
-            hookCaller(*eventMap[event], args);
+
+            g_pKeybindManager->spawn(std::format("{} {}", *eventMap[event], functionsMap[event](data)));
         });
     }
 
