@@ -23,10 +23,46 @@ static std::string parseWindow(std::any data) {
     return ret;
 }
 
+static std::string parseWorkspace(std::any data) {
+    const auto&        workspace = std::any_cast<PHLWORKSPACE>(data);
+    const std::string& ret       = getWorkspaceData(workspace, eHyprCtlOutputFormat::FORMAT_JSON);
+    return ret;
+}
+
+static std::string parceCWorkspace(std::any data) {
+    const auto&        workspace = std::any_cast<CWorkspace*>(data);
+    const std::string& ret       = parseWorkspace(workspace->m_pSelf.lock());
+    return ret;
+}
+
+static std::string parseMonitor(std::any data) {
+    const auto&        monitor = std::any_cast<CMonitor*>(data);
+    const std::string& ret     = getMonitorData(monitor->self.lock(), eHyprCtlOutputFormat::FORMAT_JSON);
+    return ret;
+}
+
+static std::string parseVectorWorkspaceMonitor(std::any data) {
+    std::string ret = "[";
+    const auto& vec = std::any_cast<std::vector<std::any>>(data);
+    for (const auto& it : vec) {
+        if (it.type() == typeid(PHLWORKSPACE)) {
+            ret += parseWorkspace(it);
+        } else if (it.type() == typeid(CMonitor)) {
+            ret += getMonitorData(std::any_cast<CMonitor*>(it)->self.lock(), eHyprCtlOutputFormat::FORMAT_JSON);
+        }
+        ret += ",";
+    }
+    if (ret.length() > 1) {
+        ret.pop_back();
+    }
+    ret += "]";
+    return ret;
+}
+
 static std::unordered_map<std::string, std::function<std::string(std::any)>> functionsMap = {{"activeWindow", parseWindow},
                                                                                              {"keyboardFocus", [](std::any data) { return ""; }},
-                                                                                             {"moveWorkspace", [](std::any data) { return ""; }},
-                                                                                             {"focusedMon", [](std::any data) { return ""; }}, //
+                                                                                             {"moveWorkspace", parseVectorWorkspaceMonitor},
+                                                                                             {"focusedMon", parseMonitor},
                                                                                              {"moveWindow", [](std::any data) { return ""; }},
                                                                                              {"openLayer", [](std::any data) { return ""; }},
                                                                                              {"closeLayer", [](std::any data) { return ""; }},
@@ -35,13 +71,13 @@ static std::unordered_map<std::string, std::function<std::string(std::any)>> fun
                                                                                              {"windowUpdateRules", parseWindow},
                                                                                              {"urgent", parseWindow},
                                                                                              {"minimize", [](std::any data) { return ""; }},
-                                                                                             {"monitorAdded", [](std::any data) { return ""; }},
-                                                                                             {"monitorRemoved", [](std::any data) { return ""; }},
-                                                                                             {"createWorkspace", [](std::any data) { return ""; }},
-                                                                                             {"destroyWorkspace", [](std::any data) { return ""; }},
-                                                                                             {"workspace", [](std::any data) { return ""; }},
+                                                                                             {"monitorAdded", parseMonitor},
+                                                                                             {"monitorRemoved", parseMonitor},
+                                                                                             {"createWorkspace", parceCWorkspace},
+                                                                                             {"destroyWorkspace", parceCWorkspace},
                                                                                              {"fullscreen", parseWindow},
                                                                                              {"changeFloatingMode", parseWindow},
+                                                                                             {"workspace", parceCWorkspace},
                                                                                              {"submap", [](std::any data) { return std::any_cast<std::string>(data); }},
                                                                                              {"mouseMove", [](std::any data) { return ""; }},
                                                                                              {"mouseButton", [](std::any data) { return ""; }},
@@ -50,7 +86,7 @@ static std::unordered_map<std::string, std::function<std::string(std::any)>> fun
                                                                                              {"touchUp", [](std::any data) { return ""; }},
                                                                                              {"touchMove", [](std::any data) { return ""; }},
                                                                                              {"activeLayout", [](std::any data) { return ""; }},
-                                                                                             {"preRender", [](std::any data) { return ""; }},
+                                                                                             {"preRender", parseMonitor},
                                                                                              {"screencast", [](std::any data) { return ""; }},
                                                                                              {"render", [](std::any data) { return ""; }},
                                                                                              {"windowtitle", parseWindow},
