@@ -59,49 +59,50 @@ static std::string parseVectorWorkspaceMonitor(std::any data) {
     return ret;
 }
 
-static std::unordered_map<std::string, std::function<std::string(std::any)>> functionsMap = {{"activeWindow", parseWindow},
-                                                                                             {"keyboardFocus", [](std::any data) { return ""; }},
-                                                                                             {"moveWorkspace", parseVectorWorkspaceMonitor},
-                                                                                             {"focusedMon", parseMonitor},
-                                                                                             {"moveWindow", [](std::any data) { return ""; }},
-                                                                                             {"openLayer", [](std::any data) { return ""; }},
-                                                                                             {"closeLayer", [](std::any data) { return ""; }},
-                                                                                             {"openWindow", parseWindow},
-                                                                                             {"closeWindow", parseWindow},
-                                                                                             {"windowUpdateRules", parseWindow},
-                                                                                             {"urgent", parseWindow},
-                                                                                             {"minimize", [](std::any data) { return ""; }},
-                                                                                             {"monitorAdded", parseMonitor},
-                                                                                             {"monitorRemoved", parseMonitor},
-                                                                                             {"createWorkspace", parceCWorkspace},
-                                                                                             {"destroyWorkspace", parceCWorkspace},
-                                                                                             {"fullscreen", parseWindow},
-                                                                                             {"changeFloatingMode", parseWindow},
-                                                                                             {"workspace", parceCWorkspace},
-                                                                                             {"submap", [](std::any data) { return std::any_cast<std::string>(data); }},
-                                                                                             {"mouseMove", [](std::any data) { return ""; }},
-                                                                                             {"mouseButton", [](std::any data) { return ""; }},
-                                                                                             {"mouseAxis", [](std::any data) { return ""; }},
-                                                                                             {"touchDown", [](std::any data) { return ""; }},
-                                                                                             {"touchUp", [](std::any data) { return ""; }},
-                                                                                             {"touchMove", [](std::any data) { return ""; }},
-                                                                                             {"activeLayout", [](std::any data) { return ""; }},
-                                                                                             {"preRender", parseMonitor},
-                                                                                             {"screencast", [](std::any data) { return ""; }},
-                                                                                             {"render", [](std::any data) { return ""; }},
-                                                                                             {"windowtitle", parseWindow},
-                                                                                             {"configReloaded", [](std::any data) { return ""; }},
-                                                                                             {"preConfigReload", [](std::any data) { return ""; }},
-                                                                                             {"keyPress", [](std::any data) { return ""; }},
-                                                                                             {"pin", parseWindow},
-                                                                                             {"swipeBegin", [](std::any data) { return ""; }},
-                                                                                             {"swipeUpdate", [](std::any data) { return ""; }},
-                                                                                             {"swipeEnd", [](std::any data) { return ""; }}};
+static std::unordered_map<std::string, std::function<std::string(std::any)>> functionsMap = {
+    {"activeWindow", parseWindow},
+    {"keyboardFocus", [](std::any data) { return ""; }},
+    {"moveWorkspace", parseVectorWorkspaceMonitor},
+    {"focusedMon", parseMonitor},
+    {"moveWindow", [](std::any data) { return ""; }}, //std::vectorstd::any{PHLWINDOW, PHLWORKSPACE}
+    {"openLayer", [](std::any data) { return ""; }},  //CLayerSurface*
+    {"closeLayer", [](std::any data) { return ""; }}, //CLayerSurface*
+    {"openWindow", parseWindow},
+    {"closeWindow", parseWindow},
+    {"windowUpdateRules", parseWindow},
+    {"urgent", parseWindow},
+    {"minimize", [](std::any data) { return ""; }}, //std::vectorstd::any{PHLWINDOW, int64_t}
+    {"monitorAdded", parseMonitor},
+    {"monitorRemoved", parseMonitor},
+    {"createWorkspace", parceCWorkspace},
+    {"destroyWorkspace", parceCWorkspace},
+    {"fullscreen", parseWindow},
+    {"changeFloatingMode", parseWindow},
+    {"workspace", parceCWorkspace},
+    {"submap", [](std::any data) { return std::any_cast<std::string>(data); }},
+    {"mouseMove", [](std::any data) { return ""; }},    //const Vector2D
+    {"mouseButton", [](std::any data) { return ""; }},  //IPointer::SButtonEvent
+    {"mouseAxis", [](std::any data) { return ""; }},    //M: event:IPointer::SAxisEvent
+    {"touchDown", [](std::any data) { return ""; }},    //ITouch::SDownEvent
+    {"touchUp", [](std::any data) { return ""; }},      //ITouch::SUpEvent
+    {"touchMove", [](std::any data) { return ""; }},    //ITouch::SMotionEvent
+    {"activeLayout", [](std::any data) { return ""; }}, //std::vectorstd::any{SP, std::string}
+    {"preRender", parseMonitor},
+    {"screencast", [](std::any data) { return ""; }}, //std::vector<uint64_t>{state, framesInHalfSecond, owner}
+    {"render", [](std::any data) { return ""; }},     //eRenderStage
+    {"windowtitle", parseWindow},
+    {"configReloaded", [](std::any data) { return ""; }},  // nullptr
+    {"preConfigReload", [](std::any data) { return ""; }}, // nullptr
+    {"keyPress", [](std::any data) { return ""; }},        //M: event:IKeyboard::SButtonEvent, keyboard:SP<IKeyboard>
+    {"pin", parseWindow},
+    {"swipeBegin", [](std::any data) { return ""; }},  //IPointer::SSwipeBeginEvent
+    {"swipeUpdate", [](std::any data) { return ""; }}, //IPointer::SSwipeUpdateEvent
+    {"swipeEnd", [](std::any data) { return ""; }}};   //IPointer::SSwipeEndEvent
 
-static std::vector<std::string>                                              events;
-static std::unordered_map<std::string, Hyprlang::STRING const*>              eventMap;
-static std::unordered_map<std::string, CSharedPointer<HOOK_CALLBACK_FN>>     hookMap;
-static std::unordered_map<std::string, bool>                                 enabledMap;
+static std::vector<std::string>                                          events;
+static std::unordered_map<std::string, Hyprlang::STRING const*>          eventMap;
+static std::unordered_map<std::string, CSharedPointer<HOOK_CALLBACK_FN>> hookMap;
+static std::unordered_map<std::string, bool>                             enabledMap;
 
 // nuhu
 
