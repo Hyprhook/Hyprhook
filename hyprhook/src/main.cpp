@@ -5,6 +5,7 @@
 
 #include <hyprland/src/plugins/PluginAPI.hpp>
 #define private public
+#include <hyprland/src/debug/HyprCtl.hpp>
 #include <hyprland/src/managers/KeybindManager.hpp>
 #undef private
 
@@ -15,25 +16,32 @@ APICALL EXPORT std::string PLUGIN_API_VERSION() {
     return HYPRLAND_API_VERSION;
 }
 
-static std::unordered_map<std::string, std::function<std::string(std::any)>> functionsMap = {{"activeWindow", [](std::any data) { return ""; }},
+// object to json parser functions
+static std::string parseWindow(std::any data) {
+    const auto&        window = std::any_cast<PHLWINDOW>(data);
+    const std::string& ret    = getWindowData(window, eHyprCtlOutputFormat::FORMAT_JSON);
+    return ret;
+}
+
+static std::unordered_map<std::string, std::function<std::string(std::any)>> functionsMap = {{"activeWindow", parseWindow},
                                                                                              {"keyboardFocus", [](std::any data) { return ""; }},
                                                                                              {"moveWorkspace", [](std::any data) { return ""; }},
                                                                                              {"focusedMon", [](std::any data) { return ""; }}, //
                                                                                              {"moveWindow", [](std::any data) { return ""; }},
                                                                                              {"openLayer", [](std::any data) { return ""; }},
                                                                                              {"closeLayer", [](std::any data) { return ""; }},
-                                                                                             {"openWindow", [](std::any data) { return ""; }},
-                                                                                             {"closeWindow", [](std::any data) { return ""; }},
-                                                                                             {"windowUpdateRules", [](std::any data) { return ""; }},
-                                                                                             {"urgent", [](std::any data) { return ""; }},
+                                                                                             {"openWindow", parseWindow},
+                                                                                             {"closeWindow", parseWindow},
+                                                                                             {"windowUpdateRules", parseWindow},
+                                                                                             {"urgent", parseWindow},
                                                                                              {"minimize", [](std::any data) { return ""; }},
                                                                                              {"monitorAdded", [](std::any data) { return ""; }},
                                                                                              {"monitorRemoved", [](std::any data) { return ""; }},
                                                                                              {"createWorkspace", [](std::any data) { return ""; }},
                                                                                              {"destroyWorkspace", [](std::any data) { return ""; }},
-                                                                                             {"fullscreen", [](std::any data) { return ""; }},
-                                                                                             {"changeFloatingMode", [](std::any data) { return ""; }},
                                                                                              {"workspace", [](std::any data) { return ""; }},
+                                                                                             {"fullscreen", parseWindow},
+                                                                                             {"changeFloatingMode", parseWindow},
                                                                                              {"submap", [](std::any data) { return std::any_cast<std::string>(data); }},
                                                                                              {"mouseMove", [](std::any data) { return ""; }},
                                                                                              {"mouseButton", [](std::any data) { return ""; }},
@@ -45,11 +53,11 @@ static std::unordered_map<std::string, std::function<std::string(std::any)>> fun
                                                                                              {"preRender", [](std::any data) { return ""; }},
                                                                                              {"screencast", [](std::any data) { return ""; }},
                                                                                              {"render", [](std::any data) { return ""; }},
-                                                                                             {"windowtitle", [](std::any data) { return ""; }},
+                                                                                             {"windowtitle", parseWindow},
                                                                                              {"configReloaded", [](std::any data) { return ""; }},
                                                                                              {"preConfigReload", [](std::any data) { return ""; }},
                                                                                              {"keyPress", [](std::any data) { return ""; }},
-                                                                                             {"pin", [](std::any data) { return ""; }},
+                                                                                             {"pin", parseWindow},
                                                                                              {"swipeBegin", [](std::any data) { return ""; }},
                                                                                              {"swipeUpdate", [](std::any data) { return ""; }},
                                                                                              {"swipeEnd", [](std::any data) { return ""; }}};
