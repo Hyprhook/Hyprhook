@@ -59,6 +59,11 @@ static std::string parseVectorWorkspaceMonitor(std::any data) {
     return ret;
 }
 
+static std::string parseVector2D(std::any data) {
+    const auto& vec = std::any_cast<Vector2D>(data);
+    return std::format("{ \"x\": {}, \"y\": {}}", vec.x, vec.y);
+}
+
 static std::unordered_map<std::string, std::function<std::string(std::any)>> functionsMap = {
     {"activeWindow", parseWindow},
     {"keyboardFocus", [](std::any data) { return ""; }},
@@ -80,7 +85,7 @@ static std::unordered_map<std::string, std::function<std::string(std::any)>> fun
     {"changeFloatingMode", parseWindow},
     {"workspace", parceCWorkspace},
     {"submap", [](std::any data) { return std::any_cast<std::string>(data); }},
-    {"mouseMove", [](std::any data) { return ""; }},    //const Vector2D
+    {"mouseMove", parseVector2D},
     {"mouseButton", [](std::any data) { return ""; }},  //IPointer::SButtonEvent
     {"mouseAxis", [](std::any data) { return ""; }},    //M: event:IPointer::SAxisEvent
     {"touchDown", [](std::any data) { return ""; }},    //ITouch::SDownEvent
