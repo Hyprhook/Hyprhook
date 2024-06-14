@@ -56,4 +56,5 @@ static std::unordered_map<std::string, std::function<std::string(std::any)>> fun
     {"pin", parseWindow},
     {"swipeBegin", [](std::any data) { return ""; }},  //IPointer::SSwipeBeginEvent
     {"swipeUpdate", [](std::any data) { return ""; }}, //IPointer::SSwipeUpdateEvent
-    {"swipeEnd", [](std::any data) { return ""; }}};   //IPointer::SSwipeEndEvent
+    {"swipeEnd", [](std::any data) { return ""; }}     //IPointer::SSwipeEndEvent
+};
