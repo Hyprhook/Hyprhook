@@ -84,6 +84,13 @@ static std::string parseVector2D(std::any data) {
     return ret;
 }
 
+// state: 0 = released, 1 = pressed
+static std::string parseSButtonEvent(std::any data) {
+    const auto& event = std::any_cast<IPointer::SButtonEvent>(data);
+    const auto& ret = "{ \"timeMs\": " + std::to_string(event.timeMs) + ", \"button\": " + std::to_string(event.button) + ", \"state\": " + std::to_string(event.state) + "}";
+    return ret;
+}
+
 static void onConfigReloaded(void* self, std::any data) {
     HyprlandAPI::addNotification(PHANDLE, "[Hyprhook] config reoaded ", CColor{0.2, 1.0, 0.2, 1.0}, 5000);
     for (auto& event : events) {

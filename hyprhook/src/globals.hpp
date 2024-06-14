@@ -16,6 +16,7 @@ static std::string                                                           par
 static std::string                                                           parseVectorWorkspaceMonitor(std::any data);
 static std::string                                                           parseVetorWindowWorkspace(std::any data); //tested
 static std::string                                                           parseVector2D(std::any data);
+static std::string                                                           parseSButtonEvent(std::any data);
 
 static std::unordered_map<std::string, std::function<std::string(std::any)>> functionsMap = {
     {"activeWindow", parseWindow},
@@ -39,7 +40,7 @@ static std::unordered_map<std::string, std::function<std::string(std::any)>> fun
     {"workspace", parceCWorkspace},
     {"submap", [](std::any data) { return std::any_cast<std::string>(data); }},
     {"mouseMove", parseVector2D},
-    {"mouseButton", [](std::any data) { return ""; }},  //IPointer::SButtonEvent
+    {"mouseButton", parseSButtonEvent},
     {"mouseAxis", [](std::any data) { return ""; }},    //M: event:IPointer::SAxisEvent
     {"touchDown", [](std::any data) { return ""; }},    //ITouch::SDownEvent
     {"touchUp", [](std::any data) { return ""; }},      //ITouch::SUpEvent
