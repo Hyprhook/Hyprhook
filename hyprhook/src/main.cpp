@@ -79,8 +79,9 @@ static std::string parseVetorWindowWorkspace(std::any data) { //tested
 }
 
 static std::string parseVector2D(std::any data) {
-    const auto& vec = std::any_cast<Vector2D>(data);
-    return "{ \"x\": " + std::to_string(vec.x) + ", \"y\": " + std::to_string(vec.y) + "}";
+    const auto&       vec = std::any_cast<Vector2D>(data);
+    const std::string ret = "{ \"x\": " + std::to_string(vec.x) + ", \"y\": " + std::to_string(vec.y) + "}";
+    return ret;
 }
 
 static void onConfigReloaded(void* self, std::any data) {
