@@ -17,7 +17,7 @@ APICALL EXPORT std::string PLUGIN_API_VERSION() {
 }
 
 // object to json parser functions
-static std::string parseWindow(std::any data) {
+static std::string parseWindow(std::any data) { //tested
     const auto&        window = std::any_cast<PHLWINDOW>(data);
     const std::string& ret    = getWindowData(window, eHyprCtlOutputFormat::FORMAT_JSON);
     return ret;
@@ -59,57 +59,29 @@ static std::string parseVectorWorkspaceMonitor(std::any data) {
     return ret;
 }
 
-static std::string parseVector2D(std::any data) {
-    const auto& vec = std::any_cast<Vector2D>(data);
-    return std::format("{ \"x\": {}, \"y\": {}}", vec.x, vec.y);
+static std::string parseVetorWindowWorkspace(std::any data) { //tested
+    std::string ret = "[";
+    std::cout << "before cast" << std::endl;
+    const auto& vec = std::any_cast<std::vector<std::any>>(data);
+    std::cout << "after cast" << std::endl;
+    for (const auto& it : vec) {
+        if (it.type() == typeid(PHLWINDOW)) {
+            ret += parseWindow(it);
+        } else if (it.type() == typeid(PHLWORKSPACE)) {
+            ret += parseWorkspace(it);
+        }
+    }
+    if (ret.back() == ',') {
+        ret.pop_back();
+    }
+    ret += "]";
+    return ret;
 }
 
-static std::unordered_map<std::string, std::function<std::string(std::any)>> functionsMap = {
-    {"activeWindow", parseWindow},
-    {"keyboardFocus", [](std::any data) { return ""; }},
-    {"moveWorkspace", parseVectorWorkspaceMonitor},
-    {"focusedMon", parseMonitor},
-    {"moveWindow", [](std::any data) { return ""; }}, //std::vectorstd::any{PHLWINDOW, PHLWORKSPACE}
-    {"openLayer", [](std::any data) { return ""; }},  //CLayerSurface*
-    {"closeLayer", [](std::any data) { return ""; }}, //CLayerSurface*
-    {"openWindow", parseWindow},
-    {"closeWindow", parseWindow},
-    {"windowUpdateRules", parseWindow},
-    {"urgent", parseWindow},
-    {"minimize", [](std::any data) { return ""; }}, //std::vectorstd::any{PHLWINDOW, int64_t}
-    {"monitorAdded", parseMonitor},
-    {"monitorRemoved", parseMonitor},
-    {"createWorkspace", parceCWorkspace},
-    {"destroyWorkspace", parceCWorkspace},
-    {"fullscreen", parseWindow},
-    {"changeFloatingMode", parseWindow},
-    {"workspace", parceCWorkspace},
-    {"submap", [](std::any data) { return std::any_cast<std::string>(data); }},
-    {"mouseMove", parseVector2D},
-    {"mouseButton", [](std::any data) { return ""; }},  //IPointer::SButtonEvent
-    {"mouseAxis", [](std::any data) { return ""; }},    //M: event:IPointer::SAxisEvent
-    {"touchDown", [](std::any data) { return ""; }},    //ITouch::SDownEvent
-    {"touchUp", [](std::any data) { return ""; }},      //ITouch::SUpEvent
-    {"touchMove", [](std::any data) { return ""; }},    //ITouch::SMotionEvent
-    {"activeLayout", [](std::any data) { return ""; }}, //std::vectorstd::any{SP, std::string}
-    {"preRender", parseMonitor},
-    {"screencast", [](std::any data) { return ""; }}, //std::vector<uint64_t>{state, framesInHalfSecond, owner}
-    {"render", [](std::any data) { return ""; }},     //eRenderStage
-    {"windowtitle", parseWindow},
-    {"configReloaded", [](std::any data) { return ""; }},  // nullptr
-    {"preConfigReload", [](std::any data) { return ""; }}, // nullptr
-    {"keyPress", [](std::any data) { return ""; }},        //M: event:IKeyboard::SButtonEvent, keyboard:SP<IKeyboard>
-    {"pin", parseWindow},
-    {"swipeBegin", [](std::any data) { return ""; }},  //IPointer::SSwipeBeginEvent
-    {"swipeUpdate", [](std::any data) { return ""; }}, //IPointer::SSwipeUpdateEvent
-    {"swipeEnd", [](std::any data) { return ""; }}};   //IPointer::SSwipeEndEvent
-
-static std::vector<std::string>                                          events;
-static std::unordered_map<std::string, Hyprlang::STRING const*>          eventMap;
-static std::unordered_map<std::string, CSharedPointer<HOOK_CALLBACK_FN>> hookMap;
-static std::unordered_map<std::string, bool>                             enabledMap;
-
-// nuhu
+static std::string parseVector2D(std::any data) {
+    const auto& vec = std::any_cast<Vector2D>(data);
+    return "{ \"x\": " + std::to_string(vec.x) + ", \"y\": " + std::to_string(vec.y) + "}";
+}
 
 static void onConfigReloaded(void* self, std::any data) {
     HyprlandAPI::addNotification(PHANDLE, "[Hyprhook] config reoaded ", CColor{0.2, 1.0, 0.2, 1.0}, 5000);
@@ -149,7 +121,7 @@ APICALL EXPORT PLUGIN_DESCRIPTION_INFO PLUGIN_INIT(HANDLE handle) {
                 return;
             }
 
-            g_pKeybindManager->spawn(std::format("{} {}", *eventMap[event], functionsMap[event](data)));
+            g_pKeybindManager->spawn(std::format("{} {}", *eventMap[event], "\"" + functionsMap[event](data) + "\""));
         });
     }
 
