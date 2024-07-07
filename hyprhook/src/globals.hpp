@@ -2,61 +2,65 @@
 
 #include <hyprland/src/plugins/PluginAPI.hpp>
 
-inline HANDLE                                                                PHANDLE = nullptr;
+inline HANDLE                                                            PHANDLE = nullptr;
 
-static std::vector<std::string>                                              events;
-static std::unordered_map<std::string, Hyprlang::STRING const*>              eventMap;
-static std::unordered_map<std::string, CSharedPointer<HOOK_CALLBACK_FN>>     hookMap;
-static std::unordered_map<std::string, bool>                                 enabledMap;
+static std::vector<std::string>                                          events;
+static std::unordered_map<std::string, Hyprlang::STRING const*>          eventMap;
+static std::unordered_map<std::string, CSharedPointer<HOOK_CALLBACK_FN>> hookMap;
+static std::unordered_map<std::string, bool>                             enabledMap;
 
-static std::string                                                           parseWindow(std::any data); //tested
-static std::string                                                           parseWorkspace(std::any data);
-static std::string                                                           parseCWorkspace(std::any data);
-static std::string                                                           parseMonitor(std::any data);
-static std::string                                                           parseVectorWorkspaceMonitor(std::any data);
-static std::string                                                           parseVetorWindowWorkspace(std::any data); //tested
-static std::string                                                           parseVector2D(std::any data);
-static std::string                                                           parseSButtonEvent(std::any data);
-static std::string                                                           parseSDownEvent(std::any data);
-static std::string                                                           parseSUpEvent(std::any);
+namespace Parser {
+    std::string parseWindow(std::any data);
+    std::string parseWorkspace(std::any data);
+    std::string parseCWorkspace(std::any data);
+    std::string parseMonitor(std::any data);
+    std::string parseVectorWorkspaceMonitor(std::any data);
+    std::string parseVetorWindowWorkspace(std::any data);
+    std::string parseVector2D(std::any data);
+    std::string parseSButtonEvent(std::any data);
+    std::string parseSDownEvent(std::any data);
+    std::string parseSUpEvent(std::any data);
+    std::string parseEmpty(std::any data);
+    std::string parseSubmap(std::any data);
+}
 
 static std::unordered_map<std::string, std::function<std::string(std::any)>> functionsMap = {
-    {"activeWindow", parseWindow},
-    {"keyboardFocus", [](std::any data) { return ""; }}, //wlr_surface*
-    {"moveWorkspace", parseVectorWorkspaceMonitor},
-    {"focusedMon", parseMonitor},
-    {"moveWindow", parseVetorWindowWorkspace},
-    {"openLayer", [](std::any data) { return ""; }},  //CLayerSurface*
-    {"closeLayer", [](std::any data) { return ""; }}, //CLayerSurface*
-    {"openWindow", parseWindow},
-    {"closeWindow", parseWindow},
-    {"windowUpdateRules", parseWindow},
-    {"urgent", parseWindow},
-    {"minimize", [](std::any data) { return ""; }}, //std::vectorstd::any{PHLWINDOW, int64_t}
-    {"monitorAdded", parseMonitor},
-    {"monitorRemoved", parseMonitor},
-    {"createWorkspace", parseCWorkspace},
-    {"destroyWorkspace", parseCWorkspace},
-    {"fullscreen", parseWindow},
-    {"changeFloatingMode", parseWindow},
-    {"workspace", parseCWorkspace},
-    {"submap", [](std::any data) { return std::any_cast<std::string>(data); }},
-    {"mouseMove", parseVector2D},
-    {"mouseButton", parseSButtonEvent},
-    {"mouseAxis", [](std::any data) { return ""; }}, //M: event:IPointer::SAxisEvent
-    {"touchDown", parseSDownEvent},
-    {"touchUp", parseSUpEvent},
-    {"touchMove", [](std::any data) { return ""; }},    //ITouch::SMotionEvent
-    {"activeLayout", [](std::any data) { return ""; }}, //std::vectorstd::any{SP, std::string}
-    {"preRender", parseMonitor},
-    {"screencast", [](std::any data) { return ""; }}, //std::vector<uint64_t>{state, framesInHalfSecond, owner}
-    {"render", [](std::any data) { return ""; }},     //eRenderStage
-    {"windowtitle", parseWindow},
-    {"configReloaded", [](std::any data) { return ""; }},  // nullptr
-    {"preConfigReload", [](std::any data) { return ""; }}, // nullptr
-    {"keyPress", [](std::any data) { return ""; }},        //M: event:IKeyboard::SButtonEvent, keyboard:SP<IKeyboard>
-    {"pin", parseWindow},
-    {"swipeBegin", [](std::any data) { return ""; }},  //IPointer::SSwipeBeginEvent
-    {"swipeUpdate", [](std::any data) { return ""; }}, //IPointer::SSwipeUpdateEvent
-    {"swipeEnd", [](std::any data) { return ""; }}     //IPointer::SSwipeEndEvent
+    {"activeWindow", Parser::parseWindow},
+    {"keyboardFocus", Parser::parseEmpty}, //wlr_surface*
+    {"moveWorkspace", Parser::parseVectorWorkspaceMonitor},
+    {"focusedMon", Parser::parseMonitor},
+    {"moveWindow", Parser::parseVetorWindowWorkspace},
+    {"openLayer", Parser::parseEmpty},  //CLayerSurface*
+    {"closeLayer", Parser::parseEmpty}, //CLayerSurface*
+    {"openWindow", Parser::parseWindow},
+    {"closeWindow", Parser::parseWindow},
+    {"windowUpdateRules", Parser::parseWindow},
+    {"urgent", Parser::parseWindow},
+    {"minimize", Parser::parseEmpty}, //std::vectorstd::any{PHLWINDOW, int64_t}
+    {"monitorAdded", Parser::parseMonitor},
+    {"monitorRemoved", Parser::parseMonitor},
+    {"createWorkspace", Parser::parseCWorkspace},
+    {"destroyWorkspace", Parser::parseCWorkspace},
+    {"fullscreen", Parser::parseWindow},
+    {"changeFloatingMode", Parser::parseWindow},
+    {"workspace", Parser::parseCWorkspace},
+    {"submap", Parser::parseSubmap},
+    {"mouseMove", Parser::parseVector2D},
+    {"mouseButton", Parser::parseSButtonEvent},
+    {"mouseAxis", Parser::parseEmpty}, //M: event:IPointer::SAxisEvent
+    {"touchDown", Parser::parseSDownEvent},
+    {"touchUp", Parser::parseSUpEvent},
+    {"touchMove", Parser::parseEmpty},    //ITouch::SMotionEvent
+    {"activeLayout", Parser::parseEmpty}, //std::vectorstd::any{SP, std::string}
+    {"preRender", Parser::parseMonitor},
+    {"screencast", Parser::parseEmpty}, //std::vector<uint64_t>{state, framesInHalfSecond, owner}
+    {"render", Parser::parseEmpty},     //eRenderStage
+    {"windowtitle", Parser::parseWindow},
+    {"configReloaded", Parser::parseEmpty},  // nullptr
+    {"preConfigReload", Parser::parseEmpty}, // nullptr
+    {"keyPress", Parser::parseEmpty},        //M: event:IKeyboard::SButtonEvent, keyboard:SP<IKeyboard>
+    {"pin", Parser::parseWindow},
+    {"swipeBegin", Parser::parseEmpty},  //IPointer::SSwipeBeginEvent
+    {"swipeUpdate", Parser::parseEmpty}, //IPointer::SSwipeUpdateEvent
+    {"swipeEnd", Parser::parseEmpty}     //IPointer::SSwipeEndEvent
 };
