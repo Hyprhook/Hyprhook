@@ -104,7 +104,7 @@ static std::string parseSUpEvent(std::any data) {
 
 static void onConfigReloaded(void* self, std::any data) {
     for (auto& event : events) {
-        enabledMap[event] = (std::string)*eventMap[event] == "" ? false : true;
+        enabledMap[event] = !static_cast<std::string>(*eventMap[event]).empty();
     }
 }
 
