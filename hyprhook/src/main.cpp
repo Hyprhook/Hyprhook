@@ -19,17 +19,17 @@ APICALL EXPORT std::string PLUGIN_API_VERSION() {
 // object to json parser functions
 static std::string parseWindow(std::any data) { //tested
     const auto&        window = std::any_cast<PHLWINDOW>(data);
-    const std::string& ret    = getWindowData(window, eHyprCtlOutputFormat::FORMAT_JSON);
+    const std::string& ret    = CHyprCtl::getWindowData(window, eHyprCtlOutputFormat::FORMAT_JSON);
     return ret;
 }
 
 static std::string parseWorkspace(std::any data) {
     const auto&        workspace = std::any_cast<PHLWORKSPACE>(data);
-    const std::string& ret       = getWorkspaceData(workspace, eHyprCtlOutputFormat::FORMAT_JSON);
+    const std::string& ret       = CHyprCtl::getWorkspaceData(workspace, eHyprCtlOutputFormat::FORMAT_JSON);
     return ret;
 }
 
-static std::string parceCWorkspace(std::any data) {
+static std::string parseCWorkspace(std::any data) {
     const auto&        workspace = std::any_cast<CWorkspace*>(data);
     const std::string& ret       = parseWorkspace(workspace->m_pSelf.lock());
     return ret;
@@ -37,7 +37,7 @@ static std::string parceCWorkspace(std::any data) {
 
 static std::string parseMonitor(std::any data) {
     const auto&        monitor = std::any_cast<CMonitor*>(data);
-    const std::string& ret     = getMonitorData(monitor->self.lock(), eHyprCtlOutputFormat::FORMAT_JSON);
+    const std::string& ret     = CHyprCtl::getMonitorData(monitor->self.lock(), eHyprCtlOutputFormat::FORMAT_JSON);
     return ret;
 }
 
@@ -48,7 +48,7 @@ static std::string parseVectorWorkspaceMonitor(std::any data) {
         if (it.type() == typeid(PHLWORKSPACE)) {
             ret += parseWorkspace(it);
         } else if (it.type() == typeid(CMonitor)) {
-            ret += getMonitorData(std::any_cast<CMonitor*>(it)->self.lock(), eHyprCtlOutputFormat::FORMAT_JSON);
+            ret += CHyprCtl::getMonitorData(std::any_cast<CMonitor*>(it)->self.lock(), eHyprCtlOutputFormat::FORMAT_JSON);
         }
         ret += ",";
     }
@@ -61,9 +61,7 @@ static std::string parseVectorWorkspaceMonitor(std::any data) {
 
 static std::string parseVetorWindowWorkspace(std::any data) { //tested
     std::string ret = "[";
-    std::cout << "before cast" << std::endl;
     const auto& vec = std::any_cast<std::vector<std::any>>(data);
-    std::cout << "after cast" << std::endl;
     for (const auto& it : vec) {
         if (it.type() == typeid(PHLWINDOW)) {
             ret += parseWindow(it);
@@ -79,15 +77,28 @@ static std::string parseVetorWindowWorkspace(std::any data) { //tested
 }
 
 static std::string parseVector2D(std::any data) {
-    const auto&       vec = std::any_cast<Vector2D>(data);
-    const std::string ret = "{ \"x\": " + std::to_string(vec.x) + ", \"y\": " + std::to_string(vec.y) + "}";
+    const auto&        vec = std::any_cast<Vector2D>(data);
+    const std::string& ret = "{ \"x\": " + std::to_string(vec.x) + ", \"y\": " + std::to_string(vec.y) + " }";
     return ret;
 }
 
 // state: 0 = released, 1 = pressed
 static std::string parseSButtonEvent(std::any data) {
-    const auto& event = std::any_cast<IPointer::SButtonEvent>(data);
-    const auto& ret = "{ \"timeMs\": " + std::to_string(event.timeMs) + ", \"button\": " + std::to_string(event.button) + ", \"state\": " + std::to_string(event.state) + "}";
+    const auto&        event = std::any_cast<IPointer::SButtonEvent>(data);
+    const std::string& ret =
+        "{ \"timeMs\": " + std::to_string(event.timeMs) + ", \"button\": " + std::to_string(event.button) + ", \"state\": " + std::to_string(event.state) + " }";
+    return ret;
+}
+
+static std::string parseSDownEvent(std::any data) {
+    const auto&        event = std::any_cast<ITouch::SDownEvent>(data);
+    const std::string& ret = "{ \"timeMs\": " + std::to_string(event.timeMs) + ", \"touchID\": " + std::to_string(event.touchID) + ", \"pos\": " + parseVector2D(event.pos) + " }";
+    return ret;
+}
+
+static std::string parseSUpEvent(std::any data) {
+    const auto&        event = std::any_cast<ITouch::SUpEvent>(data);
+    const std::string& ret   = "{ \"timeMs\": " + std::to_string(event.timeMs) + ", \"touchID:\" " + std::to_string(event.touchID) + " }";
     return ret;
 }
 

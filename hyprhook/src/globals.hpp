@@ -11,12 +11,14 @@ static std::unordered_map<std::string, bool>                                 ena
 
 static std::string                                                           parseWindow(std::any data); //tested
 static std::string                                                           parseWorkspace(std::any data);
-static std::string                                                           parceCWorkspace(std::any data);
+static std::string                                                           parseCWorkspace(std::any data);
 static std::string                                                           parseMonitor(std::any data);
 static std::string                                                           parseVectorWorkspaceMonitor(std::any data);
 static std::string                                                           parseVetorWindowWorkspace(std::any data); //tested
 static std::string                                                           parseVector2D(std::any data);
 static std::string                                                           parseSButtonEvent(std::any data);
+static std::string                                                           parseSDownEvent(std::any data);
+static std::string                                                           parseSUpEvent(std::any);
 
 static std::unordered_map<std::string, std::function<std::string(std::any)>> functionsMap = {
     {"activeWindow", parseWindow},
@@ -33,17 +35,17 @@ static std::unordered_map<std::string, std::function<std::string(std::any)>> fun
     {"minimize", [](std::any data) { return ""; }}, //std::vectorstd::any{PHLWINDOW, int64_t}
     {"monitorAdded", parseMonitor},
     {"monitorRemoved", parseMonitor},
-    {"createWorkspace", parceCWorkspace},
-    {"destroyWorkspace", parceCWorkspace},
+    {"createWorkspace", parseCWorkspace},
+    {"destroyWorkspace", parseCWorkspace},
     {"fullscreen", parseWindow},
     {"changeFloatingMode", parseWindow},
-    {"workspace", parceCWorkspace},
+    {"workspace", parseCWorkspace},
     {"submap", [](std::any data) { return std::any_cast<std::string>(data); }},
     {"mouseMove", parseVector2D},
     {"mouseButton", parseSButtonEvent},
-    {"mouseAxis", [](std::any data) { return ""; }},    //M: event:IPointer::SAxisEvent
-    {"touchDown", [](std::any data) { return ""; }},    //ITouch::SDownEvent
-    {"touchUp", [](std::any data) { return ""; }},      //ITouch::SUpEvent
+    {"mouseAxis", [](std::any data) { return ""; }}, //M: event:IPointer::SAxisEvent
+    {"touchDown", parseSDownEvent},
+    {"touchUp", parseSUpEvent},
     {"touchMove", [](std::any data) { return ""; }},    //ITouch::SMotionEvent
     {"activeLayout", [](std::any data) { return ""; }}, //std::vectorstd::any{SP, std::string}
     {"preRender", parseMonitor},
