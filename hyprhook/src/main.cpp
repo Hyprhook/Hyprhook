@@ -17,7 +17,7 @@ APICALL EXPORT std::string PLUGIN_API_VERSION() {
 }
 
 // object to json parser functions
-static std::string parseWindow(std::any data) { //tested
+static std::string parseWindow(std::any data) {
     const auto&        window = std::any_cast<PHLWINDOW>(data);
     const std::string& ret    = CHyprCtl::getWindowData(window, eHyprCtlOutputFormat::FORMAT_JSON);
     return ret;
@@ -59,7 +59,7 @@ static std::string parseVectorWorkspaceMonitor(std::any data) {
     return ret;
 }
 
-static std::string parseVetorWindowWorkspace(std::any data) { //tested
+static std::string parseVetorWindowWorkspace(std::any data) {
     std::string ret = "[";
     const auto& vec = std::any_cast<std::vector<std::any>>(data);
     for (const auto& it : vec) {
