@@ -103,7 +103,6 @@ static std::string parseSUpEvent(std::any data) {
 }
 
 static void onConfigReloaded(void* self, std::any data) {
-    HyprlandAPI::addNotification(PHANDLE, "[Hyprhook] config reoaded ", CColor{0.2, 1.0, 0.2, 1.0}, 5000);
     for (auto& event : events) {
         enabledMap[event] = (std::string)*eventMap[event] == "" ? false : true;
     }
