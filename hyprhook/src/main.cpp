@@ -117,51 +117,51 @@ namespace Parser {
 } // namespace Parser
 
 static void onConfigReloaded(void* self, std::any data) {
-    for (auto& event : events) {
-        enabledMap[event] = !static_cast<std::string>(*eventMap[event]).empty();
+    for (auto& event : Global::events) {
+        Global::enabledMap[event] = !static_cast<std::string>(*Global::eventMap[event]).empty();
     }
 }
 
 APICALL EXPORT PLUGIN_DESCRIPTION_INFO PLUGIN_INIT(HANDLE handle) {
-    PHANDLE = handle;
+    Global::PHANDLE = handle;
 
     const std::string HASH = __hyprland_api_get_hash();
 
-    for (const auto& it : functionsMap) {
-        events.push_back(it.first);
+    for (const auto& it : Global::functionsMap) {
+        Global::events.push_back(it.first);
     }
 
     // ALWAYS add this to your plugins. It will prevent random crashes coming from
     // mismatched header versions.
     if (HASH != GIT_COMMIT_HASH) {
-        HyprlandAPI::addNotification(PHANDLE, "[Hyprhook] Mismatched headers! Can't proceed.", CColor{1.0, 0.2, 0.2, 1.0}, 5000);
+        HyprlandAPI::addNotification(Global::PHANDLE, "[Hyprhook] Mismatched headers! Can't proceed.", CColor{1.0, 0.2, 0.2, 1.0}, 5000);
         throw std::runtime_error("[Hyprhook] Version mismatch");
     }
 
-    for (auto& event : events) {
-        HyprlandAPI::addConfigValue(PHANDLE, "plugin:hyprhook:" + event, Hyprlang::STRING{""});
-        eventMap[event] = (Hyprlang::STRING const*)HyprlandAPI::getConfigValue(PHANDLE, "plugin:hyprhook:" + event)->getDataStaticPtr();
+    for (auto& event : Global::events) {
+        HyprlandAPI::addConfigValue(Global::PHANDLE, "plugin:hyprhook:" + event, Hyprlang::STRING{""});
+        Global::eventMap[event] = (Hyprlang::STRING const*)HyprlandAPI::getConfigValue(Global::PHANDLE, "plugin:hyprhook:" + event)->getDataStaticPtr();
 
-        enabledMap[event] = (std::string)*eventMap[event] == "" ? false : true;
+        Global::enabledMap[event] = !static_cast<std::string>(*Global::eventMap[event]).empty();
 
-        hookMap[event] = HyprlandAPI::registerCallbackDynamic(PHANDLE, event, [&](void* self, SCallbackInfo& info, std::any data) {
-            if (!enabledMap[event]) {
+        Global::hookMap[event] = HyprlandAPI::registerCallbackDynamic(Global::PHANDLE, event, [&](void* self, SCallbackInfo& info, std::any data) {
+            if (!Global::enabledMap[event]) {
                 return;
             }
-            const auto& it = functionsMap.find(event);
-            if (it == functionsMap.end()) {
+            const auto& it = Global::functionsMap.find(event);
+            if (it == Global::functionsMap.end()) {
                 return;
             }
 
-            g_pKeybindManager->spawn(std::format("{} {}", *eventMap[event], "\"" + functionsMap[event](data) + "\""));
+            g_pKeybindManager->spawn(std::format("{} {}", *Global::eventMap[event], "\"" + Global::functionsMap[event](data) + "\""));
         });
     }
 
-    static auto P = HyprlandAPI::registerCallbackDynamic(PHANDLE, "configReloaded", [&](void* self, SCallbackInfo& info, std::any data) { onConfigReloaded(self, data); });
+    static auto P = HyprlandAPI::registerCallbackDynamic(Global::PHANDLE, "configReloaded", [&](void* self, SCallbackInfo& info, std::any data) { onConfigReloaded(self, data); });
 
     HyprlandAPI::reloadConfig();
 
-    HyprlandAPI::addNotification(PHANDLE, "[Hyprhook] Initialized successfully!", CColor{0.2, 1.0, 0.2, 1.0}, 5000);
+    HyprlandAPI::addNotification(Global::PHANDLE, "[Hyprhook] Initialized successfully!", CColor{0.2, 1.0, 0.2, 1.0}, 5000);
 
     return {"Hyprhook", "A hook proxy that lets you run scripts on event trigger", "Moritz Gleissner, Yusuf Duran", "0.1"};
 }
