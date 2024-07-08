@@ -4,8 +4,8 @@
 #include <hyprland/src/plugins/PluginAPI.hpp>
 
 namespace Global {
-    inline HANDLE                                                         PHANDLE = nullptr;
-    std::vector<std::string>                                              events;
+    inline HANDLE                                                         PHANDLE    = nullptr;
+    const std::string                                                     pluginName = "Hyprhook";
     std::unordered_map<std::string, Hyprlang::STRING const*>              eventMap;
     std::unordered_map<std::string, CSharedPointer<HOOK_CALLBACK_FN>>     hookMap;
     std::unordered_map<std::string, bool>                                 enabledMap;
