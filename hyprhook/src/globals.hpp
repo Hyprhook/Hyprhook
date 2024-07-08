@@ -1,28 +1,14 @@
 #pragma once
 
+#include "Parser.hpp"
 #include <hyprland/src/plugins/PluginAPI.hpp>
 
-namespace Parser {
-    std::string parseWindow(std::any data);
-    std::string parseWorkspace(std::any data);
-    std::string parseCWorkspace(std::any data);
-    std::string parseMonitor(std::any data);
-    std::string parseVectorWorkspaceMonitor(std::any data);
-    std::string parseVetorWindowWorkspace(std::any data);
-    std::string parseVector2D(std::any data);
-    std::string parseSButtonEvent(std::any data);
-    std::string parseSDownEvent(std::any data);
-    std::string parseSUpEvent(std::any data);
-    std::string parseEmpty(std::any data);
-    std::string parseSubmap(std::any data);
-}
-
 namespace Global {
-    inline HANDLE                                                                PHANDLE = nullptr;
-    std::vector<std::string>                                                     events;
-    std::unordered_map<std::string, Hyprlang::STRING const*>                     eventMap;
-    std::unordered_map<std::string, CSharedPointer<HOOK_CALLBACK_FN>>            hookMap;
-    std::unordered_map<std::string, bool>                                        enabledMap;
+    inline HANDLE                                                         PHANDLE = nullptr;
+    std::vector<std::string>                                              events;
+    std::unordered_map<std::string, Hyprlang::STRING const*>              eventMap;
+    std::unordered_map<std::string, CSharedPointer<HOOK_CALLBACK_FN>>     hookMap;
+    std::unordered_map<std::string, bool>                                 enabledMap;
     std::unordered_map<std::string, std::function<std::string(std::any)>> functionsMap = {
         {"activeWindow", Parser::parseWindow},
         {"keyboardFocus", Parser::parseEmpty}, //wlr_surface*
