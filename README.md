@@ -53,3 +53,16 @@ hyprpm enable Hyprhook
 ### Nix
 
 Refer to the [Hyprland wiki](https://wiki.hyprland.org/Nix/Hyprland-on-Home-Manager/#plugins) on plugins, but your flake might look like this:
+
+<!-- MARKDOWN LINKS & IMAGES -->
+
+[contributors-shield]: https://img.shields.io/github/contributors/Hyprhook/Hyprhook.svg?style=for-the-badge
+[contributors-url]: https://github.com/Hyprhook/Hyprhook/graphs/contributors
+[forks-shield]: https://img.shields.io/github/forks/Hyprhook/Hyprhook.svg?style=for-the-badge
+[forks-url]: https://github.com/Hyprhook/Hyprhook/network/members
+[stars-shield]: https://img.shields.io/github/stars/Hyprhook/Hyprhook.svg?style=for-the-badge
+[stars-url]: https://github.com/Hyprhook/Hyprhook/stargazers
+[issues-shield]: https://img.shields.io/github/issues/Hyprhook/Hyprhook.svg?style=for-the-badge
+[issues-url]: https://github.com/Hyprhook/Hyprhook/issues
+[license-shield]: https://img.shields.io/github/license/Hyprhook/Hyprhook.svg?style=for-the-badge
+[license-url]: https://github.com/Hyprhook/Hyprhook/blob/master/LICENSE.txt
