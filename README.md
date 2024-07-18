@@ -52,7 +52,7 @@
   </ol>
 </details>
 
-[](./assets/which-key.mp4)
+[](/assets/which-key.mp4)
 
 ## Installation
 
