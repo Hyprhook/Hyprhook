@@ -52,7 +52,7 @@
   </ol>
 </details>
 
-[![Which Key as excample][product-screenshot]](https://github.com/Hyprhook/Hyprhook)
+[![Which Key as example][which-key-demo]](https://github.com/Hyprhook/Hyprhook)
 
 ## Installation
 
@@ -94,6 +94,7 @@ hyprhook {
   openWindow = /path/to/another/script.sh # Add more event-script mappings as needed
 }
 ```
+
 > [!NOTE]
 > Ensure your scripts are executable and include the appropriate shebang (e.g., `#!/bin/bash` for Bash scripts). If your scripts do not execute as expected, verify that they have execute permissions and that the shebang matches the script's interpreter.
 
@@ -117,46 +118,46 @@ The plugin uses the following functions to generate JSON parameters for each eve
 
 ### List of Supported Events
 
-| Event                | Description                                      | Parameter (JSON)                         |
-| -------------------- | ------------------------------------------------ | ---------------------------------------- |
-| `activeWindow`       | Fired on active window change                    | Window data                              |
-| `keyboardFocus`      | Fired on keyboard focus change. Contains the newly focused surface | None                                   |
-| `moveWorkspace`      | Fired when a workspace changes its monitor        | Vector of Workspace and Monitor data     |
-| `focusedMon`         | Fired on monitor focus change                    | Monitor data                             |
-| `moveWindow`         | Fired when a window changes workspace             | Vector of Window and Workspace data      |
-| `openLayer`          | Fired when a layer surface is mapped              | None                                     |
-| `closeLayer`         | Fired when a layer surface is unmapped            | None                                     |
-| `openWindow`         | Fired when a window is mapped                     | Window data                              |
-| `closeWindow`        | Fired when a window is unmapped                   | Window data                              |
-| `windowUpdateRules`  | Fired when a window’s rules are updated           | Window data                              |
-| `urgent`             | Fired when a window requests urgent status        | Window data                              |
-| `minimize`           | Fired when a window requests a minimize status change | None                                  |
-| `monitorAdded`       | Fired when a monitor is plugged in                | Monitor data                             |
-| `monitorRemoved`     | Fired when a monitor is unplugged                  | Monitor data                             |
-| `createWorkspace`    | Fired when a workspace is created                 | Workspace data                           |
-| `destroyWorkspace`   | Fired when a workspace is destroyed               | Workspace data                           |
-| `fullscreen`         | Fired when a window changes fullscreen state      | Window data                              |
-| `changeFloatingMode` | Fired when a window changes float state           | Window data                              |
-| `workspace`          | Fired on a workspace change (explicitly requested by a user) | Workspace data                         |
-| `submap`             | Fired on a submap change                          | Submap data                              |
-| `mouseMove`          | Fired when the cursor moves. Param is coordinates | Vector2D data                            |
-| `mouseButton`        | Fired on a mouse button press                     | Button event data                        |
-| `mouseAxis`          | Fired on a mouse axis event                       | None                                     |
-| `touchDown`          | Fired on a touch down event                       | Touch down event data                    |
-| `touchUp`            | Fired on a touch up event                         | Touch up event data                      |
-| `touchMove`          | Fired on a touch motion event                     | None                                     |
-| `activeLayout`       | Fired on a keyboard layout change. String pointer temporary, not guaranteed after execution of the handler finishes | None                              |
-| `preRender`          | Fired before a frame for a monitor is about to be rendered | Monitor data                           |
-| `screencast`         | Fired when the screencopy state of a client changes. Keep in mind there might be multiple separate clients | None                             |
-| `render`             | Fired at various stages of rendering to allow your plugin to render stuff | None                                   |
-| `windowtitle`        | Emitted when a window title changes               | Window data                              |
-| `configReloaded`     | Emitted after the config is reloaded              | None                                     |
-| `preConfigReload`    | Emitted before a config reload                    | None                                     |
-| `keyPress`           | Emitted on a key press                            | None                                     |
-| `pin`                | Emitted when a window is pinned or unpinned       | Window data                              |
-| `swipeBegin`         | Emitted when a touchpad swipe is commenced        | None                                     |
-| `swipeUpdate`        | Emitted when a touchpad swipe is updated          | None                                     |
-| `swipeEnd`           | Emitted when a touchpad swipe is ended            | None                                     |
+| Event                | Description                                                                                                         | Parameter (JSON)                     |
+| -------------------- | ------------------------------------------------------------------------------------------------------------------- | ------------------------------------ |
+| `activeWindow`       | Fired on active window change                                                                                       | Window data                          |
+| `keyboardFocus`      | Fired on keyboard focus change. Contains the newly focused surface                                                  | None                                 |
+| `moveWorkspace`      | Fired when a workspace changes its monitor                                                                          | Vector of Workspace and Monitor data |
+| `focusedMon`         | Fired on monitor focus change                                                                                       | Monitor data                         |
+| `moveWindow`         | Fired when a window changes workspace                                                                               | Vector of Window and Workspace data  |
+| `openLayer`          | Fired when a layer surface is mapped                                                                                | None                                 |
+| `closeLayer`         | Fired when a layer surface is unmapped                                                                              | None                                 |
+| `openWindow`         | Fired when a window is mapped                                                                                       | Window data                          |
+| `closeWindow`        | Fired when a window is unmapped                                                                                     | Window data                          |
+| `windowUpdateRules`  | Fired when a window’s rules are updated                                                                             | Window data                          |
+| `urgent`             | Fired when a window requests urgent status                                                                          | Window data                          |
+| `minimize`           | Fired when a window requests a minimize status change                                                               | None                                 |
+| `monitorAdded`       | Fired when a monitor is plugged in                                                                                  | Monitor data                         |
+| `monitorRemoved`     | Fired when a monitor is unplugged                                                                                   | Monitor data                         |
+| `createWorkspace`    | Fired when a workspace is created                                                                                   | Workspace data                       |
+| `destroyWorkspace`   | Fired when a workspace is destroyed                                                                                 | Workspace data                       |
+| `fullscreen`         | Fired when a window changes fullscreen state                                                                        | Window data                          |
+| `changeFloatingMode` | Fired when a window changes float state                                                                             | Window data                          |
+| `workspace`          | Fired on a workspace change (explicitly requested by a user)                                                        | Workspace data                       |
+| `submap`             | Fired on a submap change                                                                                            | Submap data                          |
+| `mouseMove`          | Fired when the cursor moves. Param is coordinates                                                                   | Vector2D data                        |
+| `mouseButton`        | Fired on a mouse button press                                                                                       | Button event data                    |
+| `mouseAxis`          | Fired on a mouse axis event                                                                                         | None                                 |
+| `touchDown`          | Fired on a touch down event                                                                                         | Touch down event data                |
+| `touchUp`            | Fired on a touch up event                                                                                           | Touch up event data                  |
+| `touchMove`          | Fired on a touch motion event                                                                                       | None                                 |
+| `activeLayout`       | Fired on a keyboard layout change. String pointer temporary, not guaranteed after execution of the handler finishes | None                                 |
+| `preRender`          | Fired before a frame for a monitor is about to be rendered                                                          | Monitor data                         |
+| `screencast`         | Fired when the screencopy state of a client changes. Keep in mind there might be multiple separate clients          | None                                 |
+| `render`             | Fired at various stages of rendering to allow your plugin to render stuff                                           | None                                 |
+| `windowtitle`        | Emitted when a window title changes                                                                                 | Window data                          |
+| `configReloaded`     | Emitted after the config is reloaded                                                                                | None                                 |
+| `preConfigReload`    | Emitted before a config reload                                                                                      | None                                 |
+| `keyPress`           | Emitted on a key press                                                                                              | None                                 |
+| `pin`                | Emitted when a window is pinned or unpinned                                                                         | Window data                          |
+| `swipeBegin`         | Emitted when a touchpad swipe is commenced                                                                          | None                                 |
+| `swipeUpdate`        | Emitted when a touchpad swipe is updated                                                                            | None                                 |
+| `swipeEnd`           | Emitted when a touchpad swipe is ended                                                                              | None                                 |
 
 In case the information is wrong or outdated, please refer to <a href="https://wiki.hyprland.org/Plugins/Development/Event-list/">Hyprland's event list</a>.
 
