@@ -14,7 +14,7 @@ namespace Parser {
     }
 
     std::string parseSubmap(std::any data) {
-        const auto& ret = std::any_cast<std::string>(data);
+        const auto& ret = std::format("{ \"submap\": {} }"std::any_cast<std::string>(data);
         return ret;
     }
 
