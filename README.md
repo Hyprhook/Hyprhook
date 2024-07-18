@@ -1,3 +1,26 @@
+<!-- PROJECT LOGO -->
+<br />
+<div align="center">
+  <a href="https://github.com/Hyprhook/Hyprhook">
+    <img src="https://repository-images.githubusercontent.com/812448348/684c24bc-4669-431d-b7bf-2d2e266d4db8" alt="Logo" width="80" height="80">
+  </a>
+
+  <h3 align="center">Hyprhook</h3>
+
+  <p align="center">
+    A plugin for Hyprland that can call a script when an event occurs
+    <br />
+    <a href="https://github.com/Hyprhook/Hyprhook/blob/master/README.md"><strong>Explore the docs »</strong></a>
+    <br />
+    <br />
+    <a href="https://github.com/Hyprhook/Hyprhook">View Demo</a>
+    ·
+    <a href="https://github.com/Hyprhook/Hyprhook/issues/new?labels=bug&template=bug-report---.md">Report Bug</a>
+    ·
+    <a href="https://github.com/Hyprhook/Hyprhook/issues/new?labels=enhancement&template=feature-request---.md">Request Feature</a>
+  </p>
+</div>
+
 ## Installation
 
 ### Manual
