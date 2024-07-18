@@ -102,16 +102,16 @@ hyprhook {
 The plugin uses the following functions to generate JSON parameters for each event:
 
 - `Submap Data`: Returns a json with the attribut submap for the submap name changed to.
-- `Window Data`: Returns JSON for a window using like with `hyprctl activeWindow -j`.
-- `parseWorkspace`: Returns JSON for a workspace using `CHyprCtl::getWorkspaceData`.
-- `parseCWorkspace`: Returns JSON for a `CWorkspace` object.
-- `parseMonitor`: Returns JSON for a monitor using `CHyprCtl::getMonitorData`.
-- `parseVectorWorkspaceMonitor`: Returns a JSON array for a vector of workspace and monitor data.
-- `parseVectorWindowWorkspace`: Returns a JSON array for a vector of window and workspace data.
-- `parseVector2D`: Returns JSON for a `Vector2D` object.
-- `parseSButtonEvent`: Returns JSON for a button event (`IPointer::SButtonEvent`).
-- `parseSDownEvent`: Returns JSON for a touch down event (`ITouch::SDownEvent`).
-- `parseSUpEvent`: Returns JSON for a touch up event (`ITouch::SUpEvent`).
+- `Window Data`: Returns JSON for a window like with `hyprctl activeWindow -j`.
+- `Workspace Data`: Returns JSON for a workspace like with `hyprctl activeWorkspace -j`.
+- `Monitor Data`: Returns JSON for a monitor like with `hyprctl monitors -j` but for one monitor only.
+- `Vector2D Data`: Returns JSON for a `Vector2D` object with x and y values.
+- `SButton Data`: Returns JSON for a button event (`IPointer::SButtonEvent`).
+- `SDown Data`: Returns JSON for a touch down event (`ITouch::SDownEvent`).
+- `SUp Data`: Returns JSON for a touch up event (`ITouch::SUpEvent`).
+
+> [!NOTE]
+> If you want to know how the json looks like you can always set the script to be run to `echo` and see the output.
 
 ### List of Supported Events
 
