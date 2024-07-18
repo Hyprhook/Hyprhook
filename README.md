@@ -81,7 +81,8 @@ Refer to the [Hyprland wiki](https://wiki.hyprland.org/Nix/Hyprland-on-Home-Mana
 
 To configure Hyprhook, specify the script directories for each event in your Hyprland configuration file. When an event occurs, the corresponding script will be executed with the event data passed as a JSON parameter (if applicable). The available keywords are the names of the events as listed in <a href="#json-parameters">JSON Parameters</a>.
 
-[!IMPORTANT]
+> [!IMPORTANT]
+> The event 'submap' is called 'onSubmap' in the configuration file.
 
 Example configuration snippet:
 
@@ -91,10 +92,8 @@ hyprhook {
   openWindow = /path/to/another/script.sh # Add more event-script mappings as needed
 }
 ```
-[!NOTE]
-Ensure your scripts are executable and have the appropriate shebang (`#!/bin/bash` for bash scripts, for example).
-
-[!W]
+> [!NOTE]
+> Ensure your scripts are executable and have the appropriate shebang (`#!/bin/bash` for bash scripts, for example).
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
