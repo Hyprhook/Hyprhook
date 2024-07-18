@@ -110,7 +110,7 @@ The plugin uses the following functions to generate JSON parameters for each eve
 | `fullscreen`       | Fullscreen mode toggled                  | Window data       |
 | `changeFloatingMode`| Floating mode toggled                   | Window data       |
 | `workspace`        | Workspace changed                        | Workspace data    |
-| `submap`           | Submap event                             | Submap data       |
+| `submap`           | Submap event (config is called `onSubmap`)                            | Submap data       |
 | `mouseMove`        | Mouse moved                              | Vector2D data     |
 | `mouseButton`      | Mouse button event                       | Button event data |
 | `mouseAxis`        | Mouse axis event                         | None              |
