@@ -58,7 +58,7 @@
 
 To build, have hyprland headers installed and under the repo directory do:
 
-```bash
+```fish
 make all
 ```
 
@@ -66,7 +66,7 @@ Then use `hyprctl plugin load` followed by the absolute path to the `.so` file t
 
 ### Hyprpm
 
-```bash
+```fish
 hyprpm add https://github.com/Hyprhook/Hyprhook
 hyprpm enable Hyprhook
 ```
