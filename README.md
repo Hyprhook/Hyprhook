@@ -52,7 +52,7 @@
   </ol>
 </details>
 
-[![Which Key as example][which-key-demo]][which-key-demo]
+[](./assets/which-key.mp4)
 
 ## Installation
 
