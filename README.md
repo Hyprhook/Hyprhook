@@ -52,7 +52,7 @@
   </ol>
 </details>
 
-[![Which Key as example][which-key-demo]](https://github.com/Hyprhook/Hyprhook)
+[![Which Key as example][which-key-demo]][which-key-demo]
 
 ## Installation
 
