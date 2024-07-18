@@ -33,14 +33,14 @@ APICALL EXPORT PLUGIN_DESCRIPTION_INFO PLUGIN_INIT(HANDLE handle) {
     for (auto& elm : Global::functionsMap) {
         const std::string& event = elm.first;
         if (event == "submap") {
-            HyprlandAPI::addConfigValue(Global::PHANDLE, std::format("plugin:{}:onSubmap", Global::pluginName), Hyprlang::STRING{""});
+            HyprlandAPI::addConfigValue(Global::PHANDLE, std::format("plugin:{}:onSubmap", Global::configPName), Hyprlang::STRING{""});
             Global::eventMap[event] =
-                (Hyprlang::STRING const*)HyprlandAPI::getConfigValue(Global::PHANDLE, std::format("plugin:{}:onSubmap", Global::pluginName))->getDataStaticPtr();
+                (Hyprlang::STRING const*)HyprlandAPI::getConfigValue(Global::PHANDLE, std::format("plugin:{}:onSubmap", Global::configPName))->getDataStaticPtr();
 
         } else {
-            HyprlandAPI::addConfigValue(Global::PHANDLE, std::format("plugin:{}:{}", Global::pluginName, event), Hyprlang::STRING{""});
+            HyprlandAPI::addConfigValue(Global::PHANDLE, std::format("plugin:{}:{}", Global::configPName, event), Hyprlang::STRING{""});
             Global::eventMap[event] =
-                (Hyprlang::STRING const*)HyprlandAPI::getConfigValue(Global::PHANDLE, std::format("plugin:{}:{}", Global::pluginName, event))->getDataStaticPtr();
+                (Hyprlang::STRING const*)HyprlandAPI::getConfigValue(Global::PHANDLE, std::format("plugin:{}:{}", Global::configPName, event))->getDataStaticPtr();
         }
         Global::enabledMap[event] = !static_cast<std::string>(*Global::eventMap[event]).empty();
 
