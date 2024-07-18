@@ -56,7 +56,7 @@
 
 ### Manual
 
-To build, have hyprland headers installed and under the repo directory do:
+To build the project, ensure that the Hyprland headers are installed on your system. Then, navigate to the repository directory and run:
 
 ```fish
 make all
@@ -93,7 +93,7 @@ hyprhook {
 }
 ```
 > [!NOTE]
-> Ensure your scripts are executable and have the appropriate shebang (`#!/bin/bash` for bash scripts, for example).
+> Ensure your scripts are executable and include the appropriate shebang (e.g., `#!/bin/bash` for Bash scripts). If your scripts do not execute as expected, verify that they have execute permissions and that the shebang matches the script's interpreter.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -181,7 +181,7 @@ Don't forget to give the project a star! Thanks again!
 
 ## License
 
-Distributed under the MIT License. See `LICENSE.txt` for more information.
+Distributed under the MIT License. For details on what this means, please see the [MIT License summary](https://opensource.org/licenses/MIT) or refer to the `LICENSE.txt` file in this repository.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
