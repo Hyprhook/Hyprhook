@@ -31,13 +31,34 @@
   </p>
 </div>
 
+<!-- TABLE OF CONTENTS -->
+<details>
+  <summary>Table of Contents</summary>
+  <ol>
+    <li>
+      <a href="#installation">Installation</a>
+      <ul>
+        <li><a href="#manual">Manual</a></li>
+        <li><a href="#hyprpm">Hyprpm</a></li>
+        <li><a href="#nix">Nix</a></li>
+      </ul>
+    </li>
+    <li><a href="#configuration">Configuration</a></li>
+    <li><a href="#json-parameters">JSON Parameters</a></li>
+    <li><a href="#contributing">Contributing</a></li>
+    <li><a href="#license">License</a></li>
+    <li><a href="#contact">Contact</a></li>
+    <li><a href="#acknowledgments">Acknowledgments</a></li>
+  </ol>
+</details>
+
 ## Installation
 
 ### Manual
 
 To build, have hyprland headers installed and under the repo directory do:
 
-```
+```bash
 make all
 ```
 
@@ -45,7 +66,7 @@ Then use `hyprctl plugin load` followed by the absolute path to the `.so` file t
 
 ### Hyprpm
 
-```
+```bash
 hyprpm add https://github.com/Hyprhook/Hyprhook
 hyprpm enable Hyprhook
 ```
@@ -54,7 +75,7 @@ hyprpm enable Hyprhook
 
 Refer to the [Hyprland wiki](https://wiki.hyprland.org/Nix/Hyprland-on-Home-Manager/#plugins) on plugins, but your flake might look like this:
 
-## Configuration
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ## Configuration
 
@@ -62,13 +83,16 @@ To configure Hyprhook, specify the script directories for each event in your Hyp
 
 Example configuration snippet:
 
+```ini
 hyprhook {
-    activeWindow = /path/to/your/script.sh
-    openWindow = /path/to/another/script.sh
-    # Add more event-script mappings as needed
+  activeWindow = /path/to/your/script.sh
+  openWindow = /path/to/another/script.sh # Add more event-script mappings as needed
 }
+```
 
 Ensure your scripts are executable and have the appropriate shebang (`#!/bin/bash` for bash scripts, for example).
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ## JSON Parameters
 
@@ -86,50 +110,85 @@ The plugin uses the following functions to generate JSON parameters for each eve
 - `parseSDownEvent`: Returns JSON for a touch down event (`ITouch::SDownEvent`).
 - `parseSUpEvent`: Returns JSON for a touch up event (`ITouch::SUpEvent`).
 
-
 ### List of Supported Events
 
-| Event              | Description                              | Parameter (JSON)  |
-|--------------------|------------------------------------------|-------------------|
-| `activeWindow`     | Triggered when the active window changes | Window data       |
-| `keyboardFocus`    | Keyboard focus change                    | None              |
-| `moveWorkspace`    | Workspace moved                          | Vector of Workspace and Monitor data |
-| `focusedMon`       | Focused monitor changes                  | Monitor data      |
-| `moveWindow`       | Window moved                             | Vector of Window and Workspace data  |
-| `openLayer`        | A layer is opened                        | None              |
-| `closeLayer`       | A layer is closed                        | None              |
-| `openWindow`       | A window is opened                       | Window data       |
-| `closeWindow`      | A window is closed                       | Window data       |
-| `windowUpdateRules`| Window update rules                      | Window data       |
-| `urgent`           | Urgent window event                      | Window data       |
-| `minimize`         | Window minimized                         | None              |
-| `monitorAdded`     | A monitor is added                       | Monitor data      |
-| `monitorRemoved`   | A monitor is removed                     | Monitor data      |
-| `createWorkspace`  | A workspace is created                   | Workspace data    |
-| `destroyWorkspace` | A workspace is destroyed                 | Workspace data    |
-| `fullscreen`       | Fullscreen mode toggled                  | Window data       |
-| `changeFloatingMode`| Floating mode toggled                   | Window data       |
-| `workspace`        | Workspace changed                        | Workspace data    |
-| `submap`           | Submap event (config is called `onSubmap`)                            | Submap data       |
-| `mouseMove`        | Mouse moved                              | Vector2D data     |
-| `mouseButton`      | Mouse button event                       | Button event data |
-| `mouseAxis`        | Mouse axis event                         | None              |
-| `touchDown`        | Touch down event                         | Touch down event data |
-| `touchUp`          | Touch up event                           | Touch up event data |
-| `touchMove`        | Touch move event                         | None              |
-| `activeLayout`     | Active layout change                     | None              |
-| `preRender`        | Pre-render event                         | Monitor data      |
-| `screencast`       | Screencast event                         | None              |
-| `render`           | Render event                             | None              |
-| `windowtitle`      | Window title changed                     | Window data       |
-| `configReloaded`   | Configuration reloaded                   | None              |
-| `preConfigReload`  | Pre-configuration reload                 | None              |
-| `keyPress`         | Key press event                          | None              |
-| `pin`              | Pin event                                | Window data       |
-| `swipeBegin`       | Swipe begin event                        | None              |
-| `swipeUpdate`      | Swipe update event                       | None              |
-| `swipeEnd`         | Swipe end event                          | None              |
+| Event                | Description                              | Parameter (JSON)                     |
+| -------------------- | ---------------------------------------- | ------------------------------------ |
+| `activeWindow`       | Triggered when the active window changes | Window data                          |
+| `keyboardFocus`      | Keyboard focus change                    | None                                 |
+| `moveWorkspace`      | Workspace moved                          | Vector of Workspace and Monitor data |
+| `focusedMon`         | Focused monitor changes                  | Monitor data                         |
+| `moveWindow`         | Window moved                             | Vector of Window and Workspace data  |
+| `openLayer`          | A layer is opened                        | None                                 |
+| `closeLayer`         | A layer is closed                        | None                                 |
+| `openWindow`         | A window is opened                       | Window data                          |
+| `closeWindow`        | A window is closed                       | Window data                          |
+| `windowUpdateRules`  | Window update rules                      | Window data                          |
+| `urgent`             | Urgent window event                      | Window data                          |
+| `minimize`           | Window minimized                         | None                                 |
+| `monitorAdded`       | A monitor is added                       | Monitor data                         |
+| `monitorRemoved`     | A monitor is removed                     | Monitor data                         |
+| `createWorkspace`    | A workspace is created                   | Workspace data                       |
+| `destroyWorkspace`   | A workspace is destroyed                 | Workspace data                       |
+| `fullscreen`         | Fullscreen mode toggled                  | Window data                          |
+| `changeFloatingMode` | Floating mode toggled                    | Window data                          |
+| `workspace`          | Workspace changed                        | Workspace data                       |
+| `submap`             | Submap event                             | Submap data                          |
+| `mouseMove`          | Mouse moved                              | Vector2D data                        |
+| `mouseButton`        | Mouse button event                       | Button event data                    |
+| `mouseAxis`          | Mouse axis event                         | None                                 |
+| `touchDown`          | Touch down event                         | Touch down event data                |
+| `touchUp`            | Touch up event                           | Touch up event data                  |
+| `touchMove`          | Touch move event                         | None                                 |
+| `activeLayout`       | Active layout change                     | None                                 |
+| `preRender`          | Pre-render event                         | Monitor data                         |
+| `screencast`         | Screencast event                         | None                                 |
+| `render`             | Render event                             | None                                 |
+| `windowtitle`        | Window title changed                     | Window data                          |
+| `configReloaded`     | Configuration reloaded                   | None                                 |
+| `preConfigReload`    | Pre-configuration reload                 | None                                 |
+| `keyPress`           | Key press event                          | None                                 |
+| `pin`                | Pin event                                | Window data                          |
+| `swipeBegin`         | Swipe begin event                        | None                                 |
+| `swipeUpdate`        | Swipe update event                       | None                                 |
+| `swipeEnd`           | Swipe end event                          | None                                 |
 
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+<!-- CONTRIBUTING -->
+
+## Contributing
+
+Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
+
+If you have a suggestion that would make this better, please fork the repo and create a pull request. You can also simply open an issue with the tag "enhancement".
+Don't forget to give the project a star! Thanks again!
+
+1. Fork the Project
+2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the Branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+<!-- LICENSE -->
+
+## License
+
+Distributed under the MIT License. See `LICENSE.txt` for more information.
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+<!-- CONTACT -->
+
+## Contact
+
+Ugh maybe in git :)
+
+Project Link: [https://github.com/Hyprhook/Hyprhook](https://github.com/Hyprhook/Hyprhook)
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 <!-- MARKDOWN LINKS & IMAGES -->
 
 [contributors-shield]: https://img.shields.io/github/contributors/Hyprhook/Hyprhook.svg?style=for-the-badge
