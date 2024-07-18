@@ -15,101 +15,55 @@ APICALL EXPORT std::string PLUGIN_API_VERSION() {
     return HYPRLAND_API_VERSION;
 }
 
-static std::unordered_map<std::string, std::function<std::string(std::any)>> functionsMap = {{"activeWindow", [](std::any data) { return ""; }},
-                                                                                             {"keyboardFocus", [](std::any data) { return ""; }},
-                                                                                             {"moveWorkspace", [](std::any data) { return ""; }},
-                                                                                             {"focusedMon", [](std::any data) { return ""; }}, //
-                                                                                             {"moveWindow", [](std::any data) { return ""; }},
-                                                                                             {"openLayer", [](std::any data) { return ""; }},
-                                                                                             {"closeLayer", [](std::any data) { return ""; }},
-                                                                                             {"openWindow", [](std::any data) { return ""; }},
-                                                                                             {"closeWindow", [](std::any data) { return ""; }},
-                                                                                             {"windowUpdateRules", [](std::any data) { return ""; }},
-                                                                                             {"urgent", [](std::any data) { return ""; }},
-                                                                                             {"minimize", [](std::any data) { return ""; }},
-                                                                                             {"monitorAdded", [](std::any data) { return ""; }},
-                                                                                             {"monitorRemoved", [](std::any data) { return ""; }},
-                                                                                             {"createWorkspace", [](std::any data) { return ""; }},
-                                                                                             {"destroyWorkspace", [](std::any data) { return ""; }},
-                                                                                             {"fullscreen", [](std::any data) { return ""; }},
-                                                                                             {"changeFloatingMode", [](std::any data) { return ""; }},
-                                                                                             {"workspace", [](std::any data) { return ""; }},
-                                                                                             {"submap", [](std::any data) { return std::any_cast<std::string>(data); }},
-                                                                                             {"mouseMove", [](std::any data) { return ""; }},
-                                                                                             {"mouseButton", [](std::any data) { return ""; }},
-                                                                                             {"mouseAxis", [](std::any data) { return ""; }},
-                                                                                             {"touchDown", [](std::any data) { return ""; }},
-                                                                                             {"touchUp", [](std::any data) { return ""; }},
-                                                                                             {"touchMove", [](std::any data) { return ""; }},
-                                                                                             {"activeLayout", [](std::any data) { return ""; }},
-                                                                                             {"preRender", [](std::any data) { return ""; }},
-                                                                                             {"screencast", [](std::any data) { return ""; }},
-                                                                                             {"render", [](std::any data) { return ""; }},
-                                                                                             {"windowtitle", [](std::any data) { return ""; }},
-                                                                                             {"configReloaded", [](std::any data) { return ""; }},
-                                                                                             {"preConfigReload", [](std::any data) { return ""; }},
-                                                                                             {"keyPress", [](std::any data) { return ""; }},
-                                                                                             {"pin", [](std::any data) { return ""; }},
-                                                                                             {"swipeBegin", [](std::any data) { return ""; }},
-                                                                                             {"swipeUpdate", [](std::any data) { return ""; }},
-                                                                                             {"swipeEnd", [](std::any data) { return ""; }}};
-
-static std::vector<std::string>                                              events;
-static std::unordered_map<std::string, Hyprlang::STRING const*>              eventMap;
-static std::unordered_map<std::string, CSharedPointer<HOOK_CALLBACK_FN>>     hookMap;
-static std::unordered_map<std::string, bool>                                 enabledMap;
-
-// nuhu
-
 static void onConfigReloaded(void* self, std::any data) {
-    HyprlandAPI::addNotification(PHANDLE, "[Hyprhook] config reoaded ", CColor{0.2, 1.0, 0.2, 1.0}, 5000);
-    for (auto& event : events) {
-        enabledMap[event] = (std::string)*eventMap[event] == "" ? false : true;
+    for (auto& event : Global::functionsMap) {
+        Global::enabledMap[event.first] = !static_cast<std::string>(*Global::eventMap[event.first]).empty();
     }
 }
 
 APICALL EXPORT PLUGIN_DESCRIPTION_INFO PLUGIN_INIT(HANDLE handle) {
-    PHANDLE = handle;
-
+    Global::PHANDLE        = handle;
     const std::string HASH = __hyprland_api_get_hash();
 
-    for (const auto& it : functionsMap) {
-        events.push_back(it.first);
-    }
-
-    // ALWAYS add this to your plugins. It will prevent random crashes coming from
-    // mismatched header versions.
     if (HASH != GIT_COMMIT_HASH) {
-        HyprlandAPI::addNotification(PHANDLE, "[Hyprhook] Mismatched headers! Can't proceed.", CColor{1.0, 0.2, 0.2, 1.0}, 5000);
-        throw std::runtime_error("[Hyprhook] Version mismatch");
+        HyprlandAPI::addNotification(Global::PHANDLE, std::format("[{}] Mismatched headers! Can't proceed.", Global::pluginName), CColor{1.0, 0.2, 0.2, 1.0}, 5000);
+        throw std::runtime_error(std::format("[{}] Version mismatch", Global::pluginName));
     }
 
-    for (auto& event : events) {
-        HyprlandAPI::addConfigValue(PHANDLE, "plugin:hyprhook:" + event, Hyprlang::STRING{""});
-        eventMap[event] = (Hyprlang::STRING const*)HyprlandAPI::getConfigValue(PHANDLE, "plugin:hyprhook:" + event)->getDataStaticPtr();
+    for (auto& elm : Global::functionsMap) {
+        const std::string& event = elm.first;
+        if (event == "submap") {
+            HyprlandAPI::addConfigValue(Global::PHANDLE, std::format("plugin:{}:onSubmap", Global::configPName), Hyprlang::STRING{""});
+            Global::eventMap[event] =
+                (Hyprlang::STRING const*)HyprlandAPI::getConfigValue(Global::PHANDLE, std::format("plugin:{}:onSubmap", Global::configPName))->getDataStaticPtr();
 
-        enabledMap[event] = (std::string)*eventMap[event] == "" ? false : true;
+        } else {
+            HyprlandAPI::addConfigValue(Global::PHANDLE, std::format("plugin:{}:{}", Global::configPName, event), Hyprlang::STRING{""});
+            Global::eventMap[event] =
+                (Hyprlang::STRING const*)HyprlandAPI::getConfigValue(Global::PHANDLE, std::format("plugin:{}:{}", Global::configPName, event))->getDataStaticPtr();
+        }
+        Global::enabledMap[event] = !static_cast<std::string>(*Global::eventMap[event]).empty();
 
-        hookMap[event] = HyprlandAPI::registerCallbackDynamic(PHANDLE, event, [&](void* self, SCallbackInfo& info, std::any data) {
-            if (!enabledMap[event]) {
+        Global::hookMap[event] = HyprlandAPI::registerCallbackDynamic(Global::PHANDLE, event, [&](void* self, SCallbackInfo& info, std::any data) {
+            if (!Global::enabledMap[event]) {
                 return;
             }
-            const auto& it = functionsMap.find(event);
-            if (it == functionsMap.end()) {
+            const auto& it = Global::functionsMap.find(event);
+            if (it == Global::functionsMap.end()) {
                 return;
             }
 
-            g_pKeybindManager->spawn(std::format("{} {}", *eventMap[event], functionsMap[event](data)));
+            g_pKeybindManager->spawn(std::format("{} {}", *Global::eventMap[event], "\"" + Global::functionsMap[event](data) + "\""));
         });
     }
 
-    static auto P = HyprlandAPI::registerCallbackDynamic(PHANDLE, "configReloaded", [&](void* self, SCallbackInfo& info, std::any data) { onConfigReloaded(self, data); });
+    static auto P = HyprlandAPI::registerCallbackDynamic(Global::PHANDLE, "configReloaded", [&](void* self, SCallbackInfo& info, std::any data) { onConfigReloaded(self, data); });
 
     HyprlandAPI::reloadConfig();
 
-    HyprlandAPI::addNotification(PHANDLE, "[Hyprhook] Initialized successfully!", CColor{0.2, 1.0, 0.2, 1.0}, 5000);
+    HyprlandAPI::addNotification(Global::PHANDLE, std::format("[{}] Initialized successfully!", Global::pluginName), CColor{0.2, 1.0, 0.2, 1.0}, 5000);
 
-    return {"Hyprhook", "A hook proxy that lets you run scripts on event trigger", "Moritz Gleissner, Yusuf Duran", "0.1"};
+    return {Global::pluginName, "A hook proxy that lets you run scripts on event trigger", "Moritz Gleissner, Yusuf Duran", "0.1"};
 }
 
 APICALL EXPORT void PLUGIN_EXIT() {
