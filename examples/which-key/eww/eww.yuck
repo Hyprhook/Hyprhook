@@ -1,0 +1,83 @@
+(defwidget submap [value]
+  (box :orientation "h"
+        :align "right"
+    value))
+
+(defwidget binds [bindsJson]
+  (box :class "layout-box"
+    :spacing 15
+    :orientation "v"
+    :space-evenly false
+    (box)
+    (box 
+      :spacing 50
+      :orientation "h"
+      :space-evenly false
+      (box)
+      (box 
+        :spacing 55
+        :orientation "h"
+        (for entrys in bindsJson
+          (box
+            :spacing 15
+            :orientation "h"
+            :space-evenly false
+            (box
+              :orientation "v"
+              :spacing 7
+              (for entry in entrys
+                (box :class "layout-key"
+                  (label
+                    :text { entry.modmask == 0 ? "${entry.key}" : 
+                            entry.modmask == 1 ? "<shift> ${entry.key}" : 
+                            entry.modmask == 64 ? "<shift> ${entry.key}" :
+                            entry.modmask == 65 ? "<shift> <mod> ${entry.key}" :
+                            "mod not resolved ${entry.key}" }
+                    :xalign 1
+                  )
+                )
+              )
+            )
+            (box
+              :orientation "v"
+              :spacing 7
+              (for entry in entrys
+                (box
+                  (label :text " ")
+                )
+              )
+            )
+            (box
+              :orientation "v"
+              :spacing 7
+              (for entry in entrys
+                (box :class  { entry.dispatcher == "submap" ? "layout-submap" : "layout-desc" }
+                  (label 
+                    :text "${entry.description}"
+                    :xalign 0
+                  )
+                )
+              )
+            )
+          )
+        )
+      )
+      (box)
+    )
+    (box)
+  )
+)
+
+(defwindow which-key [bindsJson]
+  :monitor 0
+  :geometry (geometry :x "0%"
+                      :y "0%"
+                      :height "100px"
+                      :width "100%"
+                      :anchor "bottom center")
+  :wm-ignore true
+  :stacking "overlay"
+  :exclusive false
+  :focusable false
+  :namespace "Which Key"
+  (binds :bindsJson bindsJson))

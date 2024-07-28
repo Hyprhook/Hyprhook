@@ -45,15 +45,13 @@
     </li>
     <li><a href="#configuration">Configuration</a></li>
     <li><a href="#json-parameters">JSON Parameters</a></li>
+    <li><a href="#examples">Examples</a></li>
     <li><a href="#contributing">Contributing</a></li>
     <li><a href="#license">License</a></li>
     <li><a href="#contact">Contact</a></li>
     <li><a href="#acknowledgments">Acknowledgments</a></li>
   </ol>
 </details>
-
-<-- demo gif -->
-![Which Key Demo][which-key-demo]
 
 ## Installation
 
@@ -164,6 +162,60 @@ In case the information is wrong or outdated, please refer to <a href="https://w
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
+<!-- EXAMPLES -->
+
+## Examples
+
+### Which Key
+
+<!-- align center -->
+<p align="center">
+  <img src="./assets/which-key.gif" alt="Which Key Demo" width="600" height="400">
+</p>
+
+Emacs, Neovim user here? You might be familiar with `which-key`.
+If not, it's a plugin that displays the available keybindings in the minibuffer.
+I'm horrible at remembering keybinds, so a way of showing possible keybinds is a must for me.
+Hyprland has a way to give keybinds a desciption and a way to print configured keybinds. So the only thing left we need is a way to trigger a popup with the keybinds for a specitic submap.
+
+For a simple implementation we will use `eww` to display things and `jq` to parse the JSON data coming from `hyprctl`.
+
+#### Installation
+
+> [!WARNING]
+> For all of this to make sense you should have given your keybinds a description in your `hyprland.conf`.
+> If you haven't done that yet, you can do it like this:
+
+```ini
+bindd = $mainMod, C, Close Window, closeWindow
+```
+
+| Dependency                 | Description                                            |
+| -------------------------- | ------------------------------------------------------ |
+| `eww`                      | A widget system to display the keybinds                |
+| `jq`                       | A lightweight and flexible command-line JSON processor |
+| `JetBrains Mono Nerd Font` | A font that supports the Nerd Font icons               |
+
+1. Get the eww which-key config from ./examples/which-key/eww and place it in your eww config or if you want to use the bash script, place it in `~/.config/eww-which-key`.
+2. Get the which-key script from ./examples/which-key/which-key.sh and place it in your scripts directory. You can use `~/.config/hyprland/scripts` or `~/.local/bin` for that.
+3. Don't forget to make the script executable with `chmod +x ~/.config/hyprland/scripts/which-key.sh`.
+4. Add the following lines to your `hyprland.conf`:
+
+```ini
+hyprhook {
+  onSubmap = ~/.config/hyprland/scripts/which-key.sh
+}
+```
+
+If you want you can also bind one key to show all keybinds that are not in a submap.
+Just add the following line to your `hyprland.conf`:
+
+```ini
+bindd = $mainMod, H, Toggle Binds Help, exec, ~/.config/hyprland/scripts/which-key.sh -b
+```
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
 <!-- CONTRIBUTING -->
 
 ## Contributing
@@ -210,4 +262,3 @@ Project Link: [https://github.com/Hyprhook/Hyprhook](https://github.com/Hyprhook
 [issues-url]: https://github.com/Hyprhook/Hyprhook/issues
 [license-shield]: https://img.shields.io/github/license/Hyprhook/Hyprhook.svg?style=for-the-badge
 [license-url]: https://github.com/Hyprhook/Hyprhook/blob/master/LICENSE.txt
-[which-key-demo]: ./assets/which-key.gif

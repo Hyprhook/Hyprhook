@@ -1,0 +1,34 @@
+$surface-subtext: #7f849c;
+$surface-base: #1e1e2e;
+$surface-peach: #fac6a7;
+$surface-mauve: #cba6f7;
+$surface-blue: #89b4fa;
+
+* {
+  all: unset;
+}
+
+.layout-box {
+  font-family: "JetBrainsMono Nerd Font";
+  font-size: 1em;
+  background-repeat: no-repeat;
+  background-size: auto;
+  color: rgba($surface-subtext, 1);
+  background-color: rgba($surface-base, 1);
+  border: 2px solid rgba($surface-mauve, 0.8);
+  border-radius: 5px;
+  min-width: 1590px;
+}
+
+.layout-key {
+  color: rgba($surface-blue, 1);
+}
+
+.layout-submap {
+  color: rgba($surface-mauve, 1);
+}
+
+.layout-desc {
+  font-size: 1em;
+  color: rgba($surface-peach, 1);
+}
