@@ -53,7 +53,9 @@ APICALL EXPORT PLUGIN_DESCRIPTION_INFO PLUGIN_INIT(HANDLE handle) {
                 return;
             }
 
-            g_pKeybindManager->spawn(std::format("{} {}", *Global::eventMap[event], "\"" + Global::functionsMap[event](data) + "\""));
+            const std::string& script = *Global::eventMap[event];
+            const std::string& spawnStr = script + " '" + it->second(data) + "'";
+            g_pKeybindManager->spawn(spawnStr);
         });
     }
 

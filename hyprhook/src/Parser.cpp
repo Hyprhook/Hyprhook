@@ -15,7 +15,7 @@ namespace Parser {
 
     std::string parseSubmap(std::any data) {
         const auto&       submap = std::any_cast<std::string>(data);
-        const std::string ret = "{ \"submap\": " + submap + " }";
+        const std::string ret = "{ \"submap\": \"" + submap + "\" }";
         return ret;
     }
 
@@ -88,20 +88,20 @@ namespace Parser {
     std::string parseSButtonEvent(std::any data) {
         const auto&        event = std::any_cast<IPointer::SButtonEvent>(data);
         const std::string& ret =
-            "{ \"timeMs\": " + std::to_string(event.timeMs) + ", \"button\": " + std::to_string(event.button) + ", \"state\": " + std::to_string(event.state) + " }";
+            "{ \"timeMs\": \"" + std::to_string(event.timeMs) + "\", \"button\": \"" + std::to_string(event.button) + "\", \"state\": \"" + std::to_string(event.state) + "\" }";
         return ret;
     }
 
     std::string parseSDownEvent(std::any data) {
         const auto&        event = std::any_cast<ITouch::SDownEvent>(data);
         const std::string& ret =
-            "{ \"timeMs\": " + std::to_string(event.timeMs) + ", \"touchID\": " + std::to_string(event.touchID) + ", \"pos\": " + parseVector2D(event.pos) + " }";
+            "{ \"timeMs\": \"" + std::to_string(event.timeMs) + "\", \"touchID\": \"" + std::to_string(event.touchID) + "\", \"pos\": \"" + parseVector2D(event.pos) + "\" }";
         return ret;
     }
 
     std::string parseSUpEvent(std::any data) {
         const auto&        event = std::any_cast<ITouch::SUpEvent>(data);
-        const std::string& ret   = "{ \"timeMs\": " + std::to_string(event.timeMs) + ", \"touchID:\" " + std::to_string(event.touchID) + " }";
+        const std::string& ret   = "{ \"timeMs\": \"" + std::to_string(event.timeMs) + "\", \"touchID:\" \"" + std::to_string(event.touchID) + "\" }";
         return ret;
     }
 } // namespace Parser

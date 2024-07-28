@@ -52,6 +52,9 @@
   </ol>
 </details>
 
+<-- demo gif -->
+![Which Key Demo][which-key-demo]
+
 ## Installation
 
 ### Manual
@@ -207,4 +210,4 @@ Project Link: [https://github.com/Hyprhook/Hyprhook](https://github.com/Hyprhook
 [issues-url]: https://github.com/Hyprhook/Hyprhook/issues
 [license-shield]: https://img.shields.io/github/license/Hyprhook/Hyprhook.svg?style=for-the-badge
 [license-url]: https://github.com/Hyprhook/Hyprhook/blob/master/LICENSE.txt
-[which-key-demo]: ./assets/which-key.mp4
+[which-key-demo]: ./assets/which-key.gif
