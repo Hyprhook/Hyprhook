@@ -88,9 +88,11 @@ To configure Hyprhook, specify the script directories for each event in your Hyp
 Example configuration snippet:
 
 ```ini
-hyprhook {
-  activeWindow = /path/to/your/script.sh
-  openWindow = /path/to/another/script.sh # Add more event-script mappings as needed
+plugin {
+  hyprhook {
+    activeWindow = /path/to/your/script.sh
+    openWindow = /path/to/another/script.sh # Add more event-script mappings as needed
+  }
 }
 ```
 
