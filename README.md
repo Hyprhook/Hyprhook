@@ -184,7 +184,7 @@ For a simple implementation we will use [eww](https://github.com/elkowar/eww) to
 
 > [!IMPORTANT]
 > For all of this to make sense you should have given your keybinds a description in your `hyprland.conf`.
-> If you haven't done that yet, you can find more [here](https://wiki.hyprland.org/Configuring/Binds/#description) or do it like this:
+> If you haven't done that yet, you can find more information [here](https://wiki.hyprland.org/Configuring/Binds/#description) or do it like this:
 
 ```ini
 bindd = $mainMod, C, Close Window, closeWindow
