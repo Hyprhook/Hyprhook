@@ -4,16 +4,42 @@ CONFIG_DIR="$HOME/.config/eww-which-key"
 
 togleBase=false
 
-while getopts 'bh:' OPTION; do
+print_help() {
+  cat <<EOF
+Usage: $(basename "$0") [OPTIONS]
+
+Description:
+  This script interacts with the 'eww' and 'hyprctl' utilities to manage widget visibility based on keyboard bindings.
+  It retrieves key bindings and displays them in a dynamically calculated layout using 'eww'.
+
+Options:
+  -b            Displays all keybinds that are not in a submap. Parameters are ignored.
+  -h            Displays help message and exit.
+  
+Examples:
+  $(basename "$0") <submap>
+      Shows the keybinds with the given submap.
+
+  $(basename "$0") -b
+      Toggles the keybinds with no submap.
+
+  $(basename "$0") -h
+      Shows this help message.
+
+EOF
+}
+
+while getopts 'bh' OPTION; do
   case "$OPTION" in
   b)
     toggleBase=true
     ;;
   h)
-    echo "you have supplied the -h option it is TODO tho :)"
+    print_help
+    exit 0
     ;;
   ?)
-    echo "script usage: $(basename \$0) [-d] [-h]" >&2
+    print_help >&2
     exit 1
     ;;
   esac
@@ -39,8 +65,6 @@ openWidget() {
   eww --config "$CONFIG_DIR" open which-key --arg bindsJson="$grouped"
 }
 
-submap=$(echo "$1" | jq -c '.submap' | sed 's/"//g')
-
 if [[ $toggleBase == true ]]; then
   isActive=$(eww --config "$CONFIG_DIR" active-windows | grep "which-key")
   if [[ $isActive == "" ]]; then
@@ -50,6 +74,8 @@ if [[ $toggleBase == true ]]; then
   fi
   exit
 fi
+
+submap=$(echo "$1" | jq -c '.submap' | sed 's/"//g')
 
 if [[ $submap == "" ]]; then
   eww --config "$CONFIG_DIR" close which-key
