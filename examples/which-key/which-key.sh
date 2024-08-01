@@ -13,7 +13,7 @@ while getopts 'bh:' OPTION; do
     echo "you have supplied the -h option it is TODO tho :)"
     ;;
   ?)
-    echo "script usage: $(basename \$0) [-d] [-h]" >&2
+    echo "script usage: $(basename \$0) [-b] [-h]" >&2
     exit 1
     ;;
   esac
