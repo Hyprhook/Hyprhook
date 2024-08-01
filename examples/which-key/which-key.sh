@@ -14,14 +14,14 @@ Description:
 
 Options:
   -b            Displays all keybinds that are not in a submap. Parameters are ignored.
-  -h            Display this help message and exit.
+  -h            Displays help message and exit.
   
 Examples:
   $(basename "$0") <submap>
-      Showes the keybinds with the given submap.
+      Shows the keybinds with the given submap.
 
   $(basename "$0") -b
-      Toggles the keyninds with no submap.
+      Toggles the keybinds with no submap.
 
   $(basename "$0") -h
       Shows this help message.
