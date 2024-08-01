@@ -29,7 +29,7 @@ Examples:
 EOF
 }
 
-while getopts 'bh:' OPTION; do
+while getopts 'bh' OPTION; do
   case "$OPTION" in
   b)
     toggleBase=true
@@ -39,8 +39,8 @@ while getopts 'bh:' OPTION; do
     exit 0
     ;;
   ?)
-    print_help
-    exit 0
+    print_help >&2
+    exit 1
     ;;
   esac
 done
@@ -65,8 +65,6 @@ openWidget() {
   eww --config "$CONFIG_DIR" open which-key --arg bindsJson="$grouped"
 }
 
-submap=$(echo "$1" | jq -c '.submap' | sed 's/"//g')
-
 if [[ $toggleBase == true ]]; then
   isActive=$(eww --config "$CONFIG_DIR" active-windows | grep "which-key")
   if [[ $isActive == "" ]]; then
@@ -76,6 +74,8 @@ if [[ $toggleBase == true ]]; then
   fi
   exit
 fi
+
+submap=$(echo "$1" | jq -c '.submap' | sed 's/"//g')
 
 if [[ $submap == "" ]]; then
   eww --config "$CONFIG_DIR" close which-key
