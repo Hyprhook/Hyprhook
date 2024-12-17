@@ -52,8 +52,13 @@ APICALL EXPORT PLUGIN_DESCRIPTION_INFO PLUGIN_INIT(HANDLE handle) {
             if (it == Global::functionsMap.end()) {
                 return;
             }
+            if (event == "focusedMon") {
+                const std::string monitorData = it->second(data); // JSON output of parseMonitor
+                std::string       command     = "notify-send 'Hyprhook' 'Focus Change: " + monitorData + "'";
+                std::system(command.c_str());
+            }
 
-            const std::string& script = *Global::eventMap[event];
+            const std::string& script   = *Global::eventMap[event];
             const std::string& spawnStr = script + " '" + it->second(data) + "'";
             g_pKeybindManager->spawn(spawnStr);
         });
