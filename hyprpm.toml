@@ -3,6 +3,10 @@ authors = ["Moritz Gleissner", "Yusuf Duran"]
 name = "Hyprhook"
 commit_pins = [
   [
+    "788ae588979c2a1ff8a660f16e3c502ef5796755", # 0.46.0
+    "8ac86dfc8a387b6d1b795174ae3186115a8eac4b",
+  ],
+  [
     "293e687389a19b369f312c5c335c9afe7c886be1",
     "bf99dc6ea9558011bfe40f31e8435b59ba031e5d",
   ],
@@ -11,8 +15,8 @@ commit_pins = [
     "571d45b08678cb7ffc629fb8a4ce43babc80f3a8",
   ],
   [
-    "8412ffcc42012888757cd00a004871e8bc353cf2",
-    "2510092db845384a5ee66ac3dfe40ea71a15fe43",
+    "8412ffcc42012888757cd00a004871e8bc353cf2", # hyprland
+    "2510092db845384a5ee66ac3dfe40ea71a15fe43", # hyprhook
   ],
 ]
 
