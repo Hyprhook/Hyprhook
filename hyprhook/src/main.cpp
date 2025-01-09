@@ -66,9 +66,6 @@ APICALL EXPORT PLUGIN_DESCRIPTION_INFO PLUGIN_INIT(HANDLE handle) {
 
     HyprlandAPI::reloadConfig();
 
-    const CHyprColor successColor(0.0f, 1.0f, 0.0f, 1.0f);
-    HyprlandAPI::addNotification(Global::PHANDLE, std::format("[{}] Initialized successfully!", Global::pluginName), successColor, 5000);
-
     return {Global::pluginName, "A hook proxy that lets you run scripts on event trigger", "Moritz Gleissner, Yusuf Duran", "0.1"};
 }
 
