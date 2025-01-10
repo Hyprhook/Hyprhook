@@ -5,6 +5,8 @@
 
 #include <hyprland/src/plugins/PluginAPI.hpp>
 #define private public
+#include <hyprland/src/helpers/Color.hpp>
+#include <hyprland/src/helpers/Timer.hpp>
 #include <hyprland/src/managers/KeybindManager.hpp>
 #undef private
 
@@ -26,7 +28,8 @@ APICALL EXPORT PLUGIN_DESCRIPTION_INFO PLUGIN_INIT(HANDLE handle) {
     const std::string HASH = __hyprland_api_get_hash();
 
     if (HASH != GIT_COMMIT_HASH) {
-        HyprlandAPI::addNotification(Global::PHANDLE, std::format("[{}] Mismatched headers! Can't proceed.", Global::pluginName), CColor{1.0, 0.2, 0.2, 1.0}, 5000);
+        const CHyprColor errorColor(1.0f, 0.0f, 0.0f, 1.0f);
+        HyprlandAPI::addNotification(Global::PHANDLE, std::format("[{}] Mismatched headers! Can't proceed.", Global::pluginName), errorColor, 5000);
         throw std::runtime_error(std::format("[{}] Version mismatch", Global::pluginName));
     }
 
@@ -53,7 +56,7 @@ APICALL EXPORT PLUGIN_DESCRIPTION_INFO PLUGIN_INIT(HANDLE handle) {
                 return;
             }
 
-            const std::string& script = *Global::eventMap[event];
+            const std::string& script   = *Global::eventMap[event];
             const std::string& spawnStr = script + " '" + it->second(data) + "'";
             g_pKeybindManager->spawn(spawnStr);
         });
@@ -62,8 +65,6 @@ APICALL EXPORT PLUGIN_DESCRIPTION_INFO PLUGIN_INIT(HANDLE handle) {
     static auto P = HyprlandAPI::registerCallbackDynamic(Global::PHANDLE, "configReloaded", [&](void* self, SCallbackInfo& info, std::any data) { onConfigReloaded(self, data); });
 
     HyprlandAPI::reloadConfig();
-
-    HyprlandAPI::addNotification(Global::PHANDLE, std::format("[{}] Initialized successfully!", Global::pluginName), CColor{0.2, 1.0, 0.2, 1.0}, 5000);
 
     return {Global::pluginName, "A hook proxy that lets you run scripts on event trigger", "Moritz Gleissner, Yusuf Duran", "0.1"};
 }

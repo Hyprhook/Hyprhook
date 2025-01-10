@@ -1,4 +1,5 @@
 
+#include <hyprland/src/desktop/DesktopTypes.hpp>
 #define WLR_USE_UNSTABLE
 #include "Parser.hpp"
 #include <hyprland/src/plugins/PluginAPI.hpp>
@@ -15,7 +16,7 @@ namespace Parser {
 
     std::string parseSubmap(std::any data) {
         const auto&       submap = std::any_cast<std::string>(data);
-        const std::string ret = "{ \"submap\": \"" + submap + "\" }";
+        const std::string ret    = "{ \"submap\": \"" + submap + "\" }";
         return ret;
     }
 
@@ -38,7 +39,7 @@ namespace Parser {
     }
 
     std::string parseMonitor(std::any data) {
-        const auto&        monitor = std::any_cast<CMonitor*>(data);
+        const auto&        monitor = std::any_cast<PHLMONITOR>(data);
         const std::string& ret     = CHyprCtl::getMonitorData(monitor->self.lock(), eHyprCtlOutputFormat::FORMAT_JSON);
         return ret;
     }
