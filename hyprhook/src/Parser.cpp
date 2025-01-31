@@ -7,6 +7,9 @@
 #include <hyprland/src/debug/HyprCtl.hpp>
 #undef private
 
+#include <hyprland/src/helpers/Monitor.hpp>
+#include <hyprland/src/managers/input/InputManager.hpp>
+
 namespace Parser {
 
     std::string parseEmpty(std::any data) {
