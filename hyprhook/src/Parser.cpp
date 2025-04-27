@@ -37,7 +37,7 @@ namespace Parser {
 
     std::string parseCWorkspace(std::any data) {
         const auto&        workspace = std::any_cast<CWorkspace*>(data);
-        const std::string& ret       = parseWorkspace(workspace->m_pSelf.lock());
+        const std::string& ret       = parseWorkspace(workspace->m_self.lock());
         return ret;
     }
 
