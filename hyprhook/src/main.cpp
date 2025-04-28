@@ -6,7 +6,6 @@
 #include <hyprland/src/plugins/PluginAPI.hpp>
 #define private public
 #include <hyprland/src/helpers/Color.hpp>
-#include <hyprland/src/helpers/Timer.hpp>
 #include <hyprland/src/managers/KeybindManager.hpp>
 #undef private
 
