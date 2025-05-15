@@ -1,4 +1,3 @@
-
 #include <hyprland/src/desktop/DesktopTypes.hpp>
 #define WLR_USE_UNSTABLE
 #include "Parser.hpp"
@@ -43,7 +42,7 @@ namespace Parser {
 
     std::string parseMonitor(std::any data) {
         const auto&        monitor = std::any_cast<PHLMONITOR>(data);
-        const std::string& ret     = CHyprCtl::getMonitorData(monitor->self.lock(), eHyprCtlOutputFormat::FORMAT_JSON);
+        const std::string& ret     = CHyprCtl::getMonitorData(monitor->m_self.lock(), eHyprCtlOutputFormat::FORMAT_JSON);
         return ret;
     }
 
@@ -54,7 +53,7 @@ namespace Parser {
             if (it.type() == typeid(PHLWORKSPACE)) {
                 ret += parseWorkspace(it);
             } else if (it.type() == typeid(CMonitor)) {
-                ret += CHyprCtl::getMonitorData(std::any_cast<CMonitor*>(it)->self.lock(), eHyprCtlOutputFormat::FORMAT_JSON);
+                ret += CHyprCtl::getMonitorData(std::any_cast<CMonitor*>(it)->m_self.lock(), eHyprCtlOutputFormat::FORMAT_JSON);
             }
             ret += ",";
         }
