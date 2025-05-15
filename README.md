@@ -83,7 +83,12 @@ Refer to the [Hyprland wiki](https://wiki.hyprland.org/Nix/Hyprland-on-Home-Mana
 To configure Hyprhook, specify the script directories for each event in your Hyprland configuration file. When an event occurs, the corresponding script will be executed with the event data passed as a JSON parameter (if applicable). The available keywords are the names of the events as listed in <a href="#json-parameters">JSON Parameters</a>.
 
 > [!IMPORTANT]
-> The event 'submap' is called 'onSubmap' in the configuration file.
+> Some events have a different name in the hyprhook config:
+>
+> |Event|Hyprhook config name|
+> |---|------------------|
+> |submap|onSubmap|
+> |workspace|onWorkspace|
 
 Example configuration snippet:
 
@@ -92,6 +97,7 @@ plugin {
   hyprhook {
     activeWindow = /path/to/your/script.sh
     openWindow = /path/to/another/script.sh # Add more event-script mappings as needed
+    onWorkspace = /path/to/your/workspace/script.sh # Use the right config name
   }
 }
 ```
