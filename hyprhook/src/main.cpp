@@ -39,6 +39,11 @@ APICALL EXPORT PLUGIN_DESCRIPTION_INFO PLUGIN_INIT(HANDLE handle) {
             Global::eventMap[event] =
                 (Hyprlang::STRING const*)HyprlandAPI::getConfigValue(Global::PHANDLE, std::format("plugin:{}:onSubmap", Global::configPName))->getDataStaticPtr();
 
+        } else if (event == "workspace") {
+            HyprlandAPI::addConfigValue(Global::PHANDLE, std::format("plugin:{}:onWorkspace", Global::configPName), Hyprlang::STRING{""});
+            Global::eventMap[event] =
+                (Hyprlang::STRING const*)HyprlandAPI::getConfigValue(Global::PHANDLE, std::format("plugin:{}:onWorkspace", Global::configPName))->getDataStaticPtr();
+
         } else {
             HyprlandAPI::addConfigValue(Global::PHANDLE, std::format("plugin:{}:{}", Global::configPName, event), Hyprlang::STRING{""});
             Global::eventMap[event] =
@@ -47,6 +52,7 @@ APICALL EXPORT PLUGIN_DESCRIPTION_INFO PLUGIN_INIT(HANDLE handle) {
         Global::enabledMap[event] = !static_cast<std::string>(*Global::eventMap[event]).empty();
 
         Global::hookMap[event] = HyprlandAPI::registerCallbackDynamic(Global::PHANDLE, event, [&](void* self, SCallbackInfo& info, std::any data) {
+            const CHyprColor errorColor(1.0f, 0.0f, 0.0f, 1.0f);
             if (!Global::enabledMap[event]) {
                 return;
             }
