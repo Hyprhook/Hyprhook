@@ -30,7 +30,7 @@ namespace Global {
         {"destroyWorkspace", Parser::parseCWorkspace},
         {"fullscreen", Parser::parseWindow},
         {"changeFloatingMode", Parser::parseWindow},
-        {"workspace", Parser::parseCWorkspace},
+        {"workspace", Parser::parseWorkspace},
         {"submap", Parser::parseSubmap},
         {"mouseMove", Parser::parseVector2D},
         {"mouseButton", Parser::parseSButtonEvent},
