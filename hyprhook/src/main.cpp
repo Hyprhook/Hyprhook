@@ -39,6 +39,11 @@ APICALL EXPORT PLUGIN_DESCRIPTION_INFO PLUGIN_INIT(HANDLE handle) {
             Global::eventMap[event] =
                 (Hyprlang::STRING const*)HyprlandAPI::getConfigValue(Global::PHANDLE, std::format("plugin:{}:onSubmap", Global::configPName))->getDataStaticPtr();
 
+        } else if (event == "workspace") {
+            HyprlandAPI::addConfigValue(Global::PHANDLE, std::format("plugin:{}:onWorkspace", Global::configPName), Hyprlang::STRING{""});
+            Global::eventMap[event] =
+                (Hyprlang::STRING const*)HyprlandAPI::getConfigValue(Global::PHANDLE, std::format("plugin:{}:onWorkspace", Global::configPName))->getDataStaticPtr();
+
         } else {
             HyprlandAPI::addConfigValue(Global::PHANDLE, std::format("plugin:{}:{}", Global::configPName, event), Hyprlang::STRING{""});
             Global::eventMap[event] =
@@ -47,17 +52,25 @@ APICALL EXPORT PLUGIN_DESCRIPTION_INFO PLUGIN_INIT(HANDLE handle) {
         Global::enabledMap[event] = !static_cast<std::string>(*Global::eventMap[event]).empty();
 
         Global::hookMap[event] = HyprlandAPI::registerCallbackDynamic(Global::PHANDLE, event, [&](void* self, SCallbackInfo& info, std::any data) {
+            const CHyprColor errorColor(1.0f, 0.0f, 0.0f, 1.0f);
             if (!Global::enabledMap[event]) {
                 return;
             }
             const auto& it = Global::functionsMap.find(event);
+
             if (it == Global::functionsMap.end()) {
                 return;
             }
 
-            const std::string& script   = *Global::eventMap[event];
-            const std::string& spawnStr = script + " '" + it->second(data) + "'";
-            g_pKeybindManager->spawn(spawnStr);
+            const std::string& script = *Global::eventMap[event];
+
+            try {
+                const std::string& spawnStr = script + " '" + it->second(data) + "'";
+                g_pKeybindManager->spawn(spawnStr);
+            } catch (const std::bad_any_cast&) {
+                HyprlandAPI::addNotification(Global::PHANDLE, std::format("[{}] Bad any cast for '{}'. The HyprlandAPI might have changed", Global::pluginName, event), errorColor,
+                                             5000);
+            }
         });
     }
 
