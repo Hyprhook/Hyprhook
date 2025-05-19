@@ -6,7 +6,6 @@
 *.lo
 *.o
 *.obj
-
 # Precompiled Headers
 *.gch
 *.pch
@@ -46,3 +45,7 @@ meson-private
 
 # vscode
 .vscode
+
+
+# Hyprland folder
+Hyprland
