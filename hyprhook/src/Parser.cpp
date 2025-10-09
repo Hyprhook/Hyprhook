@@ -11,6 +11,11 @@
 
 namespace Parser {
 
+    static void trimTrailingComma(std::string& str) {
+        if (!str.empty() && str.back() == ',')
+            str.pop_back();
+    }
+
     std::string parseEmpty(std::any data) {
         const std::string& ret = "";
         return ret;
@@ -23,8 +28,9 @@ namespace Parser {
     }
 
     std::string parseWindow(std::any data) {
-        const auto&        window = std::any_cast<PHLWINDOW>(data);
-        const std::string& ret    = CHyprCtl::getWindowData(window, eHyprCtlOutputFormat::FORMAT_JSON);
+        const auto& window = std::any_cast<PHLWINDOW>(data);
+        std::string ret    = CHyprCtl::CHyprCtl::getWindowData(window, eHyprCtlOutputFormat::FORMAT_JSON);
+        trimTrailingComma(ret);
         return ret;
     }
 
