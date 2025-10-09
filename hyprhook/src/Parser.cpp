@@ -47,8 +47,9 @@ namespace Parser {
     }
 
     std::string parseMonitor(std::any data) {
-        const auto&        monitor = std::any_cast<PHLMONITOR>(data);
-        const std::string& ret     = CHyprCtl::getMonitorData(monitor->m_self.lock(), eHyprCtlOutputFormat::FORMAT_JSON);
+        const auto& monitor = std::any_cast<PHLMONITOR>(data);
+        std::string ret     = CHyprCtl::getMonitorData(monitor->m_self.lock(), eHyprCtlOutputFormat::FORMAT_JSON);
+        trimTrailingComma(ret);
         return ret;
     }
 
