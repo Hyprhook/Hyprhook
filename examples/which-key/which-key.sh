@@ -60,8 +60,13 @@ openWidget() {
   commandGroup=$(echo "$deleted" | jq -c '[ .[] | select(.dispatcher | contains("submap") | not) ]')
   commandGroupSorted=$(echo "$commandGroup" | jq -c ' sort_by(.key) ')
   merged=$(echo "$commandGroupSorted$submapGroupSorted" | jq -s 'reduce .[] as $x ([]; . + $x)')
-  grouped=$(echo "$merged" | jq -c '[ _nwise('$columns') ]')
-  # echo "$grouped"
+  grouped=$(echo "$merged" | jq -c --argjson n "$columns" '
+    def chunks(s):
+      . as $in
+      | reduce range(0; length; $n) as $i
+          ([]; . + [$in[$i : ($i + $n)]]);
+    chunks($n)
+  ')
   eww --config "$CONFIG_DIR" open which-key --arg bindsJson="$grouped"
 }
 
