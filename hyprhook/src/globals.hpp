@@ -26,8 +26,8 @@ namespace Global {
         {"minimize", Parser::parseEmpty}, //std::vectorstd::any{PHLWINDOW, int64_t}
         {"monitorAdded", Parser::parseMonitor},
         {"monitorRemoved", Parser::parseMonitor},
-        {"createWorkspace", Parser::parseWorkspace},
-        {"destroyWorkspace", Parser::parseWorkspace},
+        {"createWorkspace", Parser::parseCWorkspace},
+        {"destroyWorkspace", Parser::parseCWorkspace},
         {"fullscreen", Parser::parseWindow},
         {"changeFloatingMode", Parser::parseWindow},
         {"workspace", Parser::parseWorkspace},
