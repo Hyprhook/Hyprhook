@@ -18,6 +18,10 @@ commit_pins = [
     "5ee35f914f921e5696030698e74fb5566a804768", # hyprland v.0.48
     "cb08b5ca89d81c5497c8fba1a438d435786462f6", # hyprhook
   ],
+  [
+    "967c3c7404d4fa00234e29c70df3e263386d2597", # hyprland v0.52.1
+    "23d65bc8c5f43f461b2f24868580a66267120510", # hyprhook
+  ],
 ]
 
 [Hyprhook]
