@@ -28,7 +28,8 @@ commit_pins = [
   ],
   [
     "967c3c7404d4fa00234e29c70df3e263386d2597", # hyprland v0.52.1
-    "b5d6e22ee6388d1f3b58d1d83e8c5c37dd8aa780" # hyprhook
+    "b5d6e22ee6388d1f3b58d1d83e8c5c37dd8aa780", # hyprhook
+  ],
 ]
 
 [Hyprhook]
