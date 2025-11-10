@@ -26,7 +26,7 @@ APICALL EXPORT PLUGIN_DESCRIPTION_INFO PLUGIN_INIT(HANDLE handle) {
     Global::PHANDLE        = handle;
     const std::string HASH = __hyprland_api_get_hash();
 
-    if (HASH != GIT_COMMIT_HASH) {
+    if (HASH != __hyprland_api_get_client_hash()) {
         const CHyprColor errorColor(1.0f, 0.0f, 0.0f, 1.0f);
         HyprlandAPI::addNotification(Global::PHANDLE, std::format("[{}] Mismatched headers! Can't proceed.", Global::pluginName), errorColor, 5000);
         throw std::runtime_error(std::format("[{}] Version mismatch", Global::pluginName));
