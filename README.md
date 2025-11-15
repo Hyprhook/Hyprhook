@@ -85,10 +85,10 @@ To configure Hyprhook, specify the script directories for each event in your Hyp
 > [!IMPORTANT]
 > Some events have a different name in the hyprhook config:
 >
-> |Event|Hyprhook config name|
-> |---|------------------|
-> |submap|onSubmap|
-> |workspace|onWorkspace|
+> | Event     | Hyprhook config name |
+> | --------- | -------------------- |
+> | submap    | onSubmap             |
+> | workspace | onWorkspace          |
 
 Example configuration snippet:
 
