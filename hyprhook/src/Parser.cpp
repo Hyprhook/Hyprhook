@@ -2,9 +2,7 @@
 #define WLR_USE_UNSTABLE
 #include "Parser.hpp"
 #include <hyprland/src/plugins/PluginAPI.hpp>
-#define private public
 #include <hyprland/src/debug/HyprCtl.hpp>
-#undef private
 
 #include <hyprland/src/helpers/Monitor.hpp>
 #include <hyprland/src/managers/input/InputManager.hpp>

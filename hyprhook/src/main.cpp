@@ -4,10 +4,7 @@
 #define WLR_USE_UNSTABLE
 
 #include <hyprland/src/plugins/PluginAPI.hpp>
-#define private public
 #include <hyprland/src/helpers/Color.hpp>
-#include <hyprland/src/managers/KeybindManager.hpp>
-#undef private
 
 #include "globals.hpp"
 
@@ -66,7 +63,7 @@ APICALL EXPORT PLUGIN_DESCRIPTION_INFO PLUGIN_INIT(HANDLE handle) {
 
             try {
                 const std::string& spawnStr = script + " '" + it->second(data) + "'";
-                g_pKeybindManager->spawn(spawnStr);
+                HyprlandAPI::invokeHyprctlCommand("dispatch", "exec " + spawnStr);
             } catch (const std::bad_any_cast&) {
                 HyprlandAPI::addNotification(Global::PHANDLE, std::format("[{}] Bad any cast for '{}'. The HyprlandAPI might have changed", Global::pluginName, event), errorColor,
                                              5000);
