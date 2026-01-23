@@ -157,7 +157,7 @@ The plugin uses the following functions to generate JSON parameters for each eve
 | `preRender`          | Fired before a frame for a monitor is about to be rendered                                                          | Monitor data                         |
 | `screencast`         | Fired when the screencopy state of a client changes. Keep in mind there might be multiple separate clients          | None                                 |
 | `render`             | Fired at various stages of rendering to allow your plugin to render stuff                                           | None                                 |
-| `windowtitle`        | Emitted when a window title changes                                                                                 | Window data                          |
+| `windowTitle`        | Emitted when a window title changes                                                                                 | Window data                          |
 | `configReloaded`     | Emitted after the config is reloaded                                                                                | None                                 |
 | `preConfigReload`    | Emitted before a config reload                                                                                      | None                                 |
 | `keyPress`           | Emitted on a key press                                                                                              | None                                 |
