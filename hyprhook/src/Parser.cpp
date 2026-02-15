@@ -1,4 +1,5 @@
 #include <hyprland/src/desktop/DesktopTypes.hpp>
+#include <mutex>
 #define WLR_USE_UNSTABLE
 #include "Parser.hpp"
 #include <hyprland/src/plugins/PluginAPI.hpp>
@@ -9,7 +10,9 @@
 
 namespace Parser {
 
-    static void trimTrailingComma(std::string& str) {
+    std::shared_mutex hyprctlLock;
+
+    static void       trimTrailingComma(std::string& str) {
         if (!str.empty() && str.back() == ',')
             str.pop_back();
     }
@@ -26,6 +29,7 @@ namespace Parser {
     }
 
     std::string parseWindow(std::any data) {
+        const auto& lock   = std::scoped_lock(hyprctlLock);
         const auto& window = std::any_cast<PHLWINDOW>(data);
         std::string ret    = CHyprCtl::CHyprCtl::getWindowData(window, eHyprCtlOutputFormat::FORMAT_JSON);
         trimTrailingComma(ret);
