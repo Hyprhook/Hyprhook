@@ -27,7 +27,10 @@ namespace Parser {
 
     std::string parseWindow(std::any data) {
         const auto& window = std::any_cast<PHLWINDOW>(data);
-        std::string ret    = CHyprCtl::CHyprCtl::getWindowData(window, eHyprCtlOutputFormat::FORMAT_JSON);
+        // TODO: error handling and don't even exec the script for the event
+        if (!window)
+            return "{}";
+        std::string ret = CHyprCtl::CHyprCtl::getWindowData(window, eHyprCtlOutputFormat::FORMAT_JSON);
         trimTrailingComma(ret);
         return ret;
     }
