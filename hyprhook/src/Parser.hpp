@@ -1,10 +1,8 @@
 #pragma once
-#include <shared_mutex>
 #include <string>
 #include <any>
 
 namespace Parser {
-    // hyprctl usage lock
     std::string parseWindow(std::any data);
     std::string parseWorkspace(std::any data);
     std::string parseCWorkspace(std::any data);
