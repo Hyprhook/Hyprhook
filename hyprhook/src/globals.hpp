@@ -9,7 +9,6 @@ namespace Global {
     const std::string                                                     pluginName  = "Hyprhook";
     const std::string                                                     configPName = "hyprhook";
     std::unordered_map<std::string, Hyprlang::STRING const*>              eventMap;
-    std::unordered_map<std::string, CSharedPointer<HOOK_CALLBACK_FN>>     hookMap;
     std::unordered_map<std::string, bool>                                 enabledMap;
     std::unordered_map<std::string, std::function<std::string(std::any)>> functionsMap = {
         {"activeWindow", Parser::parseWindow},
