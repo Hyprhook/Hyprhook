@@ -22,6 +22,9 @@ static void onConfigReloaded() {
 
 template <typename T>
 static void executeHook(const std::string& event, T data) {
+    if (!Global::hyprlandReady) {
+        return;
+    }
     const CHyprColor errorColor(1.0f, 0.0f, 0.0f, 1.0f);
     if (!Global::enabledMap[event]) {
         return;
@@ -44,6 +47,9 @@ static void executeHook(const std::string& event, T data) {
 }
 
 static void executeHookEmpty(const std::string& event) {
+    if (!Global::hyprlandReady) {
+        return;
+    }
     const CHyprColor errorColor(1.0f, 0.0f, 0.0f, 1.0f);
     if (!Global::enabledMap[event]) {
         return;
@@ -96,6 +102,11 @@ APICALL EXPORT PLUGIN_DESCRIPTION_INFO PLUGIN_INIT(HANDLE handle) {
     }
 
     // Register event listeners using Event::bus()
+    // Wait for Hyprland to be fully ready before executing hooks
+    static auto ready = Event::bus()->m_events.ready.listen([]() {
+        Global::hyprlandReady = true;
+    });
+
     static auto activeWindow = Event::bus()->m_events.window.active.listen([](PHLWINDOW window, Desktop::eFocusReason reason) {
         executeHook("activeWindow", window);
     });

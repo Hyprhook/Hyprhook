@@ -8,6 +8,7 @@ namespace Global {
     inline HANDLE                                                         PHANDLE     = nullptr;
     const std::string                                                     pluginName  = "Hyprhook";
     const std::string                                                     configPName = "hyprhook";
+    inline bool                                                           hyprlandReady = false;
     std::unordered_map<std::string, Hyprlang::STRING const*>              eventMap;
     std::unordered_map<std::string, bool>                                 enabledMap;
     std::unordered_map<std::string, std::function<std::string(std::any)>> functionsMap = {
