@@ -42,7 +42,7 @@ namespace Global {
         {"preRender", Parser::parseMonitor},
         {"screencast", Parser::parseEmpty}, //std::vector<uint64_t>{state, framesInHalfSecond, owner}
         {"render", Parser::parseEmpty},     //eRenderStage
-        {"windowtitle", Parser::parseWindow},
+        {"windowTitle", Parser::parseWindow},
         {"configReloaded", Parser::parseEmpty},  // nullptr
         {"preConfigReload", Parser::parseEmpty}, // nullptr
         {"keyPress", Parser::parseEmpty},        //M: event:IKeyboard::SButtonEvent, keyboard:SP<IKeyboard>

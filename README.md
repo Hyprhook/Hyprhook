@@ -74,7 +74,44 @@ hyprpm enable Hyprhook
 
 ### Nix
 
-Refer to the [Hyprland wiki](https://wiki.hyprland.org/Nix/Hyprland-on-Home-Manager/#plugins) on plugins, but your flake might look like this:
+To use this plugin, it's recommended that you are already using the [Hyprland flake](https://github.com/hyprwm/Hyprland).
+
+Refer to the [Hyprland wiki](https://wiki.hyprland.org/Nix/Hyprland-on-Home-Manager/#plugins) on plugins, but your flake setup might look like this:
+
+First, add this flake to your inputs:
+
+```nix
+inputs = {
+  # ...
+  hyprland.url = "github:hyprwm/Hyprland";
+  hyprhook = {
+    url = "github:Hyprhook/Hyprhook";
+    inputs.hyprland.follows = "hyprland";
+  };
+
+  # ...
+};
+```
+
+The `inputs.hyprland.follows` guarantees the plugins will always be built using
+your locked Hyprland version, thus you will never get version mismatches that
+lead to errors.
+
+After that's done, you can use the plugin with the Home Manager module like
+this:
+
+```nix
+{inputs, pkgs, ...}: {
+  wayland.windowManager.hyprland = {
+    enable = true;
+    # ...
+    plugins = [
+      inputs.hyprhook.packages.${pkgs.system}.hyprhook
+      # ...
+    ];
+  };
+}
+```
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -85,10 +122,10 @@ To configure Hyprhook, specify the script directories for each event in your Hyp
 > [!IMPORTANT]
 > Some events have a different name in the hyprhook config:
 >
-> |Event|Hyprhook config name|
-> |---|------------------|
-> |submap|onSubmap|
-> |workspace|onWorkspace|
+> | Event     | Hyprhook config name |
+> | --------- | -------------------- |
+> | submap    | onSubmap             |
+> | workspace | onWorkspace          |
 
 Example configuration snippet:
 
@@ -157,7 +194,7 @@ The plugin uses the following functions to generate JSON parameters for each eve
 | `preRender`          | Fired before a frame for a monitor is about to be rendered                                                          | Monitor data                         |
 | `screencast`         | Fired when the screencopy state of a client changes. Keep in mind there might be multiple separate clients          | None                                 |
 | `render`             | Fired at various stages of rendering to allow your plugin to render stuff                                           | None                                 |
-| `windowtitle`        | Emitted when a window title changes                                                                                 | Window data                          |
+| `windowTitle`        | Emitted when a window title changes                                                                                 | Window data                          |
 | `configReloaded`     | Emitted after the config is reloaded                                                                                | None                                 |
 | `preConfigReload`    | Emitted before a config reload                                                                                      | None                                 |
 | `keyPress`           | Emitted on a key press                                                                                              | None                                 |
