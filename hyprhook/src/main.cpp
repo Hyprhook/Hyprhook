@@ -6,6 +6,7 @@
 #include <hyprland/src/plugins/PluginAPI.hpp>
 #include <hyprland/src/helpers/Color.hpp>
 #include <hyprland/src/event/EventBus.hpp>
+#include <hyprland/src/Compositor.hpp>
 
 #include "globals.hpp"
 
@@ -22,6 +23,9 @@ static void onConfigReloaded() {
 
 template <typename T>
 static void executeHook(const std::string& event, T data) {
+    if (!Global::hyprlandReady) {
+        return;
+    }
     const CHyprColor errorColor(1.0f, 0.0f, 0.0f, 1.0f);
     if (!Global::enabledMap[event]) {
         return;
@@ -44,6 +48,9 @@ static void executeHook(const std::string& event, T data) {
 }
 
 static void executeHookEmpty(const std::string& event) {
+    if (!Global::hyprlandReady) {
+        return;
+    }
     const CHyprColor errorColor(1.0f, 0.0f, 0.0f, 1.0f);
     if (!Global::enabledMap[event]) {
         return;
@@ -96,6 +103,17 @@ APICALL EXPORT PLUGIN_DESCRIPTION_INFO PLUGIN_INIT(HANDLE handle) {
     }
 
     // Register event listeners using Event::bus()
+    // Listen for the ready event to know when Hyprland is fully initialized
+    static auto ready = Event::bus()->m_events.ready.listen([]() {
+        Global::hyprlandReady = true;
+    });
+    
+    // If there are already monitors (meaning we're past initialization), mark as ready immediately
+    // This handles the case where the plugin is loaded dynamically after Hyprland has started
+    if (g_pCompositor && !g_pCompositor->m_monitors.empty()) {
+        Global::hyprlandReady = true;
+    }
+
     static auto activeWindow = Event::bus()->m_events.window.active.listen([](PHLWINDOW window, Desktop::eFocusReason reason) {
         executeHook("activeWindow", window);
     });
